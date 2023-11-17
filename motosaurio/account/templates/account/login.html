@@ -1,5 +1,14 @@
 {% extends "base.html" %}
+
+{% load static %}
+
 {% block title %}Log-in{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'motosaurio/css/login.css' %}">
+{% endblock %}
+
 {% block content %}
     <h1>Log-in</h1>
     <p>Please, use the following form to log-in:</p>
