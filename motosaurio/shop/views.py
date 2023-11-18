@@ -1,4 +1,5 @@
 from typing import Any
+from django import http
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -12,5 +13,6 @@ class ListProducts(TemplateView):
         context = super().get_context_data(**kwargs)
         products = Product.objects.all()
         context['products'] = products
+        context['section'] = "dashboard"
         return context
     
