@@ -16,7 +16,11 @@
             <div class="d-flex flex-wrap">
                 {% for product in products %}
                 <div class="card product-card">
-                    <img src="{{ product.image }}" class="card-img-top" alt="Product image">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="Product image" width="300" height="300">
+                    {% else %}
+                        <img src="{% static 'images/Imagen_no_disponible.png' %}" alt="Imagen no disponible" width="300" height="300">
+                    {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">{{ product.description }}</p>
