@@ -23,8 +23,8 @@ class Product(models.Model):
     )
     name = models.CharField(max_length=200, verbose_name='Título')
     slug = models.SlugField(max_length=200)
-    product_type= models.CharField(max_length=255, verbose_name='Tipo de producto', choices=TYPE_CHOICES)
-    producer = models.CharField(max_length=255, verbose_name='fabricante', choices=PRODUCER_CHOICES)
+    product_type= models.CharField(max_length=255, verbose_name='Tipo de producto', choices=TYPE_CHOICES, default='OT')
+    producer = models.CharField(max_length=255, verbose_name='fabricante', choices=PRODUCER_CHOICES, default='OT')
     image = models.ImageField(upload_to='products/%Y/%m/%d',
                             blank=True)
     description = models.TextField(blank=True)
