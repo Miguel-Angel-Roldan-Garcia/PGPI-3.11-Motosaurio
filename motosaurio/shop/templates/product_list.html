@@ -1,0 +1,38 @@
+{% extends "dashboard.html" %}
+{% load i18n static %}
+
+{% block title %} Motosaurio {% endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="{% static 'style.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <div id="product_list">
+        <div class="container mt-5">
+            <h2 class="mb-4">Lista de productos</h2>
+            
+            <div class="d-flex flex-wrap">
+                {% for product in products %}
+                <div class="card product-card">
+                    <img src="{{ product.image }}" class="card-img-top" alt="Product image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text">{{ product.type }}</p>
+                        <p class="card-text">{{ product.price }}</p>
+                        <a href="#" class="btn btn-primary">Añadir al carrito</a>
+                    </div>
+                </div>
+                {% endfor %}
+          
+            </div>
+          </div>
+    </div>
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+

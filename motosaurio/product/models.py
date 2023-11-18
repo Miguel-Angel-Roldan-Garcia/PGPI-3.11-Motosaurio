@@ -18,7 +18,7 @@ PRODUCER_CHOICES = (
 	('YA', 'YAMAHA'), 
 	('DU', 'DUCATI'), 
 	('KY', 'KYMCO'),
-	('OT, 'OTROS) 
+	('OT', 'OTROS') 
 )
 
 class Producto(models.Model):
