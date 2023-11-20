@@ -26,7 +26,11 @@
                         <p class="card-text">{{ product.description }}</p>
                         <p class="card-text">{{ product.type }}</p>
                         <p class="card-text">{{ product.price }}</p>
+                        {% if product.available %}
                         <a href="#" class="btn btn-primary">Añadir al carrito</a>
+                        {% else %}
+                        <p><span style="color: red;">PRODUCTO AGOTADO</span></p>
+                        {%endif %}
                     </div>
                 </div>
                 {% endfor %}
