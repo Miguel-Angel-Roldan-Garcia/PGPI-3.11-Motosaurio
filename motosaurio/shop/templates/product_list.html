@@ -4,39 +4,91 @@
 {% block title %} Motosaurio {% endblock %}
 
 {% block extrahead %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{% static 'style.css' %}" />
 {% endblock %}
 
 {% block content %}
-    <div id="product_list">
-        <div class="container mt-5">
+  <div class="container-fluid">
+    <div class="row">
+      <table style="width:30%">
+        <tr>
+            <th style="width:7,5%"><b>Ordena por:</b></th>
+            <th style="width:7,5%">
+                <a>Nombre:</a>
+            </th>
+            <th style="width:7,5%">
+              <a >Precio:</a>
+            </th>
+            <th style="width:7,5%"><a href="?order=-available">Disponibilidad</a></th>
+            <!-- Agrega más columnas según tus necesidades -->
+        </tr>
+        <tr>
+          <td></td>
+          <td style ="text-align: center"><a href="?order=name">a-z</a></td>
+          <td style ="text-align: center"><a href="?order=price">Menor a mayor</a></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td style ="text-align: center"><a href="?order=-name">z-a</a></td>
+          <td style ="text-align: center"><a href="?order=-price">Mayor a menor</a></td>
+          <td></td>
+        </tr>
+      </table>
+      
+      <!-- Left Lateral Menu -->
+    <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">
+              Menu Item 1
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              Menu Item 2
+            </a>
+          </li>
+          <!-- Add more menu items as needed -->
+        </ul>
+      </div>
+    </nav>
+  
+      <!-- Content Box -->
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h2 class="mb-4">Lista de productos</h2>
             
             <div class="d-flex flex-wrap">
                 {% for product in products %}
                 <div class="card product-card">
                     {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="Product image" width="300" height="300">
+                        <img src="{% static product.image.url %}" class="card-img-top" alt="Product image" width="300" height="300">
                     {% else %}
                         <img src="{% static 'images/Imagen_no_disponible.png' %}" alt="Imagen no disponible" width="300" height="300">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">{{ product.description }}</p>
-                        <p class="card-text">{{ product.type }}</p>
-                        <p class="card-text">{{ product.price }}</p>
+                        <p class="card-text">{{ product.product_type }}</p>
+                        <p class="card-text">{{ product.price }} €</p>
                         <a href="#" class="btn btn-primary">Añadir al carrito</a>
                     </div>
                 </div>
                 {% endfor %}
           
             </div>
-          </div>
+        </div>
+        <!-- Your content goes here -->
+      </main>
     </div>
+  </div>
 {% endblock %}
 
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 

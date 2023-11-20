@@ -1,0 +1,244 @@
+[
+{
+  "model": "shop.product",
+  "pk": 1,
+  "fields": {
+    "name": "BRIDGESTONE BATTLAX HYPERSPORT S22 RADIAL REAR TIRE",
+    "slug": "bridgestone-battlax-hypersport-s22-radial-rear-tire",
+    "product_type": "RU",
+    "producer": "OT",
+    "image": "images/rueda1.jpg",
+    "description": "El Battlax Hypersport S22 es el principal neumático de Bridgestone para la moto deportiva de calle moderna. Los compuestos mejorados y el diseño del patrón promueven un mejor manejo en todas las condiciones sin comprometer el desgaste..",
+    "price": "222.58",
+    "available": true,
+    "created": "2023-11-18T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 2,
+  "fields": {
+    "name": "NEUMÁTICO HONDA K555 140/80-15 67H",
+    "slug": "neumatico-honda-k555-140/80-15-67h",
+    "product_type": "RU",
+    "producer": "HO",
+    "image": "images/rueda2.jpg",
+    "description": "El K555 de Honda se establece como un neumático versátil, con capacidad para lograr un rendimiento altísimo en todo tipo de condiciones. Confort y estabilidad aseguradas..",
+    "price": "231.00",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 3,
+  "fields": {
+    "name": "KAWASAKI 49 CC MOTOR",
+    "slug": "kawasaki-49-cc-motor",
+    "product_type": "MO",
+    "producer": "KA",
+    "image": "images/motor1.jpg",
+    "description": "Kawasaki 49 CC Motor de 2 tiempos Motor de arranque por tracción Mini Pocket Pit Pullstart Carburador Filtro de aire Cabezal Dirt Bike Quad Pocket Bike.",
+    "price": "92.99",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 4,
+  "fields": {
+    "name": "DUCATI 49CC 2 TIEMPOS MINI MOTOR",
+    "slug": "Ducati-49cc-2-Tiempos-Mini-Motor",
+    "product_type": "MO",
+    "producer": "DU",
+    "image": "images/motor2.jpg",
+    "description": "Ducati 49cc 2 Tiempos Mini Motor Pullstart Carburador Filtro de Aire Cabeza Dirt Bike Quad Pocket Bike",
+    "price": "82.67",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 5,
+  "fields": {
+    "name": "PALANCA DE FRENO KAWASAKI",
+    "slug": "palanca-de-freno-kawasaki",
+    "product_type": "FR",
+    "producer": "KA",
+    "image": "images/freno1.jpg",
+    "description": "Palancas de freno y embrague de motocicleta, extensibles y plegables de CNC, para Kawasaki Z750 (no para el modelo Z750S) 2007 2008 2009 2010 2011 2012",
+    "price": "44.65",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 6,
+  "fields": {
+    "name": "PALANCA UNIVERSAL DEL CILINDRO MAESTRO DE FRENOS",
+    "slug": "palanca-universal-del-cilindro-maestro-de-frenos",
+    "product_type": "FR",
+    "producer": "OT",
+    "image": "images/freno2.jpg",
+    "description": "Qiilu 1 par de 7/8'' (22 mm) Universal Palancas del Cilindro Maestro de Frenos del Embrague de Motocicleta",
+    "price": "45.32",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+
+{
+  "model": "shop.product",
+  "pk": 7,
+  "fields": {
+    "name": "FILTRO UNIVERSAL DE AIRE",
+    "slug": "filtro-universal-de-aire",
+    "product_type": "FI",
+    "producer": "OT",
+    "image": "images/filtro1.jpg",
+    "description": "GOOFIT 48mm Filtro De Aire reemplazo para Motocicleta Universal Esponja reemplazo para 250cc 260cc 300cc Scooter Pocket Bike Atv Motocicleta Quad Cafe Racer Negro",
+    "price": "15.55",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 8,
+  "fields": {
+    "name": "FILTRO DE ACEITE KYMCO",
+    "slug": "filtro-de-aceite-kymco",
+    "product_type": "FI",
+    "producer": "KY",
+    "image": "images/filtro2.jpg",
+    "description": "Filtro de Aceite Kymco, 0800-011300, 2 Piezas de Accesorios de Filtros de Aceite de Motor",
+    "price": "22.03",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+
+{
+  "model": "shop.product",
+  "pk": 9,
+  "fields": {
+    "name": "EMBRAGUE CENTRÍFUGO FYDUN",
+    "slug": "embrague-centrifugo-fydun",
+    "product_type": "EM",
+    "producer": "OT",
+    "image": "images/embrague1.jpg",
+    "description": "Embrague centrífugo, Fydun Embrague Reforzado de Motocicleta 2 Stroke Clutch Pad for 43cc 47cc 49cc Mini Motocicleta Quad ATV Dirt Bike",
+    "price": "18.29",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 10,
+  "fields": {
+    "name": "PALANCA DE EMBRAGUE YAMAHA",
+    "slug": "palanca-de-embrague-yamaha",
+    "product_type": "EM",
+    "producer": "YA",
+    "image": "images/embrague2.jpg",
+    "description": "Palanca de embrague para 50CC - 125CC Yamaha, 22 mm 7/8 '' Palanca de embrague plegable del manillar con percha, Negro",
+    "price": "16.06",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 11,
+  "fields": {
+    "name": "TUBO DE ENLACE INTERMEDIO DE ESCAPE",
+    "slug": "tubo-de-enlace-intermedio-de-escape",
+    "product_type": "ES",
+    "producer": "OT",
+    "image": "images/escape1.jpg",
+    "description": "Tubo de enlace intermedio de escape, Tubo intermedio de escape Qiilu, convertidor catalítico eliminado Modificación de motocicleta de tubo intermedio de escape Decat para 125250390 Duke RC390 2017+",
+    "price": "95.59",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 12,
+  "fields": {
+    "name": "SILENCIADOR DE ESCAPE",
+    "slug": "silenciador-de-escape",
+    "product_type": "ES",
+    "producer": "OT",
+    "image": "images/escape2.jpg",
+    "description": "Silenciador de Escape, Tubo de Escape Exquisito de la Motocicleta de la Ejecución Exquisita de los Colores para la Moto(rojo)",
+    "price": "26.57",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 13,
+  "fields": {
+    "name": "MANILLAR MOTO DUCATI",
+    "slug": "manillar-moto-ducati",
+    "product_type": "MA",
+    "producer": "DU",
+    "image": "images/manillar1.jpg",
+    "description": "DUCATI Manillar 28mm Moto de 1 1/8 pulgadas, barra de grasa de 28 mm, agarraderas de la moto de la suciedad + almohadilla del manillar + elevador de la barra de la manija",
+    "price": "58.99",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 14,
+  "fields": {
+    "name": "MANILLAR MOTO HONDA",
+    "slug": "manillar-moto-honda",
+    "product_type": "MA",
+    "producer": "HO",
+    "image": "images/manillar2.jpg",
+    "description": "Manillar de Motocicleta Honda 7/8'', Manillar Retro de 22 mm (Negro)",
+    "price": "32.99",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+},
+{
+  "model": "shop.product",
+  "pk": 15,
+  "fields": {
+    "name": "KIT REVESTIMIENTO",
+    "slug": "kit-revestimiento",
+    "product_type": "OT",
+    "producer": "OT",
+    "image": "images/otro1.jpg",
+    "description": "Kit Completo Revestimiento Ceramico Coche y Moto, Proteccion y Abrillantado Pintura Coche y Moto, 9H Nano Ceramica, Tratamiento Antilluvia, Pulido Coche, Incluye Paño Microfibra Premium Y Esponja",
+    "price": "13.95",
+    "available": true,
+    "created": "2023-11-20T11:43:12.121Z",
+    "updated": "2023-11-20T11:43:13.076Z"
+  }
+}
+]
