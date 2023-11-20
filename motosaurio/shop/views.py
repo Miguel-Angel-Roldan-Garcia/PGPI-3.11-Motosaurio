@@ -7,13 +7,6 @@ from .models import Product
 
 class ListProducts(TemplateView):
     
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     products = Product.objects.all()
-    #     context['products'] = products
-    #     context['section'] = 'dashboard'
-    #     return context
-    
     def get(self, request, *args, **kwargs):
         template_name = "product_list.html"
         
@@ -22,6 +15,9 @@ class ListProducts(TemplateView):
         tipo = request.GET.get('product_type', None)
 
         products = Product.objects.all()
+
+        product_types = set(map(lambda p: p.product_type, products))
+        producers = set(map(lambda p: p.producer, products))
 
         if fabricante and tipo:
             products = Product.objects.filter(producer = fabricante, product_type = tipo)
@@ -36,5 +32,7 @@ class ListProducts(TemplateView):
 
         context = dict()
         context['products'] = products
+        context['product_types'] = sorted(list(product_types))
+        context['producers'] = sorted(set(producers))
         context['section'] = 'dashboard'
         return render(request, template_name=template_name, context = context)

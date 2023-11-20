@@ -1,40 +1,48 @@
 {% load static%}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>{% block title %}{% endblock %}</title>
-    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link href="{% static 'css/base.css' %}" rel="stylesheet">
+	
+	{% block extrahead %}
+	{% endblock %}
 </head>
 <body>
-    <div id="header">
-        <span class="logo"><img src="{% static 'images/Logo.png' %}" alt="Logo"></span>
 
-        
-            <ul class="menu">
-                <li {% if section == "dashboard" %}class="selected"{% endif %}>
-                    <a href="{% url 'dashboard' %}">Catálogo</a>
-                </li>
-                <li {% if section == "images" %}class="selected"{% endif %}>
-                    <a href="#">Carrito</a>
-                </li>
-                <li {% if section == "people" %}class="selected"{% endif %}>
-                    <a href="#">Fabricante</a>
-                </li>
-            </ul>
-        
-        <span class="user">
-            {% if request.user.is_authenticated %}
-                Hello {{ request.user.first_name|default:request.user.username }},
-                <a href="{% url "logout" %}">Logout</a>
-            {% else %}
-                <a href="{% url "login" %}">Log-in</a>
-            {% endif %}
-        </span>
-     </div>
+<!-- Navigation Bar -->
+<div id="header">
+	<span class="logo"><img src="{% static 'images/Logo.png' %}" alt="Logo"></span>
+			<ul class="menu">
+					<li {% if section == "dashboard" %}class="selected"{% endif %}>
+							<a href="{% url 'dashboard' %}">Catálogo</a>
+					</li>
+					<li {% if section == "images" %}class="selected"{% endif %}>
+							<a href="#">Carrito</a>
+					</li>
+					<li {% if section == "people" %}class="selected"{% endif %}>
+							<a href="#">Fabricante</a>
+					</li>
+			</ul>
+	
+	<span class="user">
+			{% if request.user.is_authenticated %}
+					Hello {{ request.user.first_name|default:request.user.username }},
+					<a href="{% url "logout" %}">Logout</a>
+			{% else %}
+					<a href="{% url "login" %}">Log-in</a>
+			{% endif %}
+	</span>
+</div>
 
-    <div id="content">
-        {% block content %}
-        {% endblock %}
-    </div>
+<!-- <div id="content"> -->
+{% block content %}
+{% endblock %}
+<!-- </div> -->
+
+
 </body>
 </html>
