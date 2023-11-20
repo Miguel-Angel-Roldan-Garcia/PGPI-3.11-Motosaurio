@@ -1,13 +1,13 @@
 
 body {
-    padding-top: 56px;
-  }
-  #sidebar{
-    margin-top: 56px;
-  }
-  .product-card {
-      flex: 1;
-      margin: 0 10px;
-      min-width: 250px;
-      max-width: 300px;
-  }
+  padding-top: 130px;
+}
+#sidebar{
+  margin-top: 56px;
+}
+.product-card {
+    flex: 1;
+    margin: 0 10px;
+    min-width: 250px;
+    max-width: 300px;
+}
