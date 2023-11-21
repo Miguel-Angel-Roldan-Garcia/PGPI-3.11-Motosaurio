@@ -1,42 +1,86 @@
 {% extends "account/dashboard.html" %}
 {% load i18n static %}
+{% load custom_filters %}
 
 {% block title %} Motosaurio {% endblock %}
 
 {% block extrahead %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="{% static 'style.css' %}" />
+  <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock %}
 
 {% block content %}
-    <div id="product_list">
-        <div class="container mt-5">
-            <h2 class="mb-4">Lista de productos</h2>
-            
-            <div class="d-flex flex-wrap">
-                {% for product in products %}
-                <div class="card product-card">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" class="card-img-top" alt="Product image" width="300" height="300">
-                    {% else %}
-                        <img src="{% static 'images/Imagen_no_disponible.png' %}" alt="Imagen no disponible" width="300" height="300">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.description }}</p>
-                        <p class="card-text">{{ product.type }}</p>
-                        <p class="card-text">{{ product.price }}</p>
-                        <a href="#" class="btn btn-primary">Añadir al carrito</a>
-                    </div>
-                </div>
-                {% endfor %}
-          
-            </div>
-          </div>
-    </div>
-{% endblock %}
+  <!-- Content Box with Left Lateral Menu -->
+<div class="container-fluid">
+  <div class="row">
 
+    <!-- Left Lateral Menu -->
+    <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <div class="container mt-4">
+          <label for="searchInput" class="form-label">Buscar por nombre:</label>
+          <input type="text" class="form-control" id="searchInput" placeholder="Nombre">
+        </div>     
+        <div class="container mt-4">
+          <label class="form-label">Filtrar por tipo:</label>
+          {% for product_type in product_types %}
+          <div class="form-check">
+						<input class="form-check-input product-type" type="checkbox" value="{{ product_type }}" id="checkboxType{{ product_type }}" onclick="handleCheckboxClick('checkboxType{{ product_type }}', 'product-type')">
+						<label class="form-check-label" for="checkboxType{{ product_type }}">{{ product_type|parse_product_type|title_value }}</label>
+					</div>
+          {% endfor %}
+        </div>  
+				<div class="container mt-4">
+          <label class="form-label">Filtrar por fabricante:</label>
+          {% for producer in producers %}
+          <div class="form-check">
+						<input class="form-check-input producer" type="checkbox" value="{{ producer }}" id="checkboxProducer{{ producer }}" onclick="handleCheckboxClick('checkboxProducer{{ producer }}', 'producer')">
+						<label class="form-check-label" for="checkboxProducer{{ producer }}">{{ producer|parse_producer|title_value }}</label>
+					</div>
+          {% endfor %}
+				<div class="container mt-4">
+					<button onclick="search()">Buscar</button> 
+				</div>
+      </div>
+    </nav>
+
+    <!-- Content Box -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="mb-4">Lista de productos</h1>
+      </div>
+      
+      <div id="product_list">
+        <div class="d-flex flex-wrap">
+          {% for product in products %}
+            <div class="card product-card">
+                {% if product.image %}
+                    <img src="{% static product.image.url %}" class="card-img-top product-img" alt="Product image" width="300" height="300">
+                {% else %}
+                    <img src="{% static 'images/Imagen_no_disponible.png' %}" alt="Imagen no disponible" width="300" height="300">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text">Tipo: {{ product.product_type|parse_product_type|title_value }}</p>
+                    <p class="card-text">Fabricante: {{ product.producer|parse_producer|title_value }}</p>
+                    <p class="card-text">{{ product.price }} €</p>
+                    <a href="#" class="btn btn-primary">Añadir al carrito</a>
+                </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script src="{% static 'filter.js' %}"></script>
+
+<!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% endblock %}
+
 

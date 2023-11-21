@@ -13,19 +13,24 @@ class Product(models.Model):
     ('OT', 'OTROS')
     )
 
+    type_choices_dict = {key: value for key, value in TYPE_CHOICES}
+
     PRODUCER_CHOICES = (
-        ('KW', 'KAWASAKI'), 
+        ('KA', 'KAWASAKI'), 
         ('HO', 'HONDA'), 
         ('YA', 'YAMAHA'), 
         ('DU', 'DUCATI'), 
         ('KY', 'KYMCO'),
         ('OT', 'OTROS') 
     )
+
+    producers_dict = {key: value for key, value in PRODUCER_CHOICES}
+
     name = models.CharField(max_length=200, verbose_name='Título')
     slug = models.SlugField(max_length=200)
     product_type= models.CharField(max_length=255, verbose_name='Tipo de producto', choices=TYPE_CHOICES, default='OT')
     producer = models.CharField(max_length=255, verbose_name='fabricante', choices=PRODUCER_CHOICES, default='OT')
-    image = models.ImageField(upload_to='products/%Y/%m/%d',
+    image = models.ImageField(upload_to='static/images',
                             blank=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10,
