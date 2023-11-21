@@ -27,6 +27,7 @@ class ListProducts(TemplateView):
             products = Product.objects.filter(product_type = tipo)
 
         if name_query:
+            name_query = name_query.upper()
             products = [p for p in products if name_query in p.name]
  
 
