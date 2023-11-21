@@ -26,7 +26,7 @@
     "image": "images/rueda2.jpg",
     "description": "El K555 de Honda se establece como un neumático versátil, con capacidad para lograr un rendimiento altísimo en todo tipo de condiciones. Confort y estabilidad aseguradas..",
     "price": "231.00",
-    "available": true,
+    "available": false,
     "created": "2023-11-20T11:43:12.121Z",
     "updated": "2023-11-20T11:43:13.076Z"
   }
@@ -220,7 +220,7 @@
     "image": "images/manillar2.jpg",
     "description": "Manillar de Motocicleta Honda 7/8'', Manillar Retro de 22 mm (Negro)",
     "price": "32.99",
-    "available": true,
+    "available": false,
     "created": "2023-11-20T11:43:12.121Z",
     "updated": "2023-11-20T11:43:13.076Z"
   }

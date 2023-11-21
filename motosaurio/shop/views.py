@@ -13,6 +13,7 @@ class ListProducts(TemplateView):
         name_query = request.GET.get('name', None)
         fabricante = request.GET.get('producer', None)
         tipo = request.GET.get('product_type', None)
+        order = request.GET.get('order', None)
 
         products = Product.objects.all()
 
@@ -25,6 +26,8 @@ class ListProducts(TemplateView):
             products = Product.objects.filter(producer = fabricante)
         elif tipo:
             products = Product.objects.filter(product_type = tipo)
+        elif order:
+            products= Product.objects.order_by(str(order))
 
         if name_query:
             name_query = name_query.upper()

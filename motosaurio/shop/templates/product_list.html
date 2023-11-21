@@ -6,6 +6,18 @@
 
 {% block extrahead %}
   <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <style>
+    table {
+      width: 100%; /* Set the table width to 100% to make it responsive */
+      border-collapse: collapse; /* Remove spacing between table cells */
+    }
+
+    th, td {
+      min-width: 100px; /* Set a minimum width for all table header and data cells */
+      padding: 10px; /* Add padding for better appearance, adjust as needed */
+      border: 1px solid #ddd; /* Add borders for better visibility, adjust as needed */
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -41,6 +53,28 @@
 					<button onclick="search()">Buscar</button> 
 				</div>
       </div>
+      <div class="container mt-4">
+        <table style="width:30%">
+          <b>Ordena por:</b>
+          <tr>
+              <th style="width:7,5%">
+                  <a>Nombre</a>
+              </th>
+              <th style="width:7,5%">
+                <a >Precio</a>
+              </th>
+          </tr>
+          <tr>
+            <td style ="text-align: center"><a href="?order=name">a-z</a></td>
+            <td style ="text-align: center"><a href="?order=price">Menor a mayor</a></td>
+          </tr>
+          <tr>
+            <td style ="text-align: center"><a href="?order=-name">z-a</a></td>
+            <td style ="text-align: center"><a href="?order=-price">Mayor a menor</a></td>
+          </tr>
+        </table>
+        <a href="?order=-available">Disponibilidad</a>
+      </div>
     </nav>
 
     <!-- Content Box -->
@@ -64,7 +98,11 @@
                     <p class="card-text">Tipo: {{ product.product_type|parse_product_type|title_value }}</p>
                     <p class="card-text">Fabricante: {{ product.producer|parse_producer|title_value }}</p>
                     <p class="card-text">{{ product.price }} €</p>
+                    {% if product.available %}
                     <a href="#" class="btn btn-primary">Añadir al carrito</a>
+                    {% else %}
+                    <p><span style="color: red;">PRODUCTO AGOTADO</span></p>
+                    {% endif %}
                 </div>
             </div>
           {% endfor %}
