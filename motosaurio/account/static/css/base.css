@@ -94,12 +94,12 @@ form p {
     overflow:auto;
 }
 
-label {
+/* label {
     float:left;
     clear:both;
     color:#333;
     margin-bottom:4px;
-}
+} */
 input, textarea {
     clear:both;
     float:left;
@@ -189,7 +189,7 @@ ul.messages li a.close {
 }
 .social li.facebook { background:#3b5399; }
 .social li.twitter { background:#00cffa; }
-.social li.google { background:#de1710; }
+.social li.google { background:#de1710; } 
 
 
 /* images */

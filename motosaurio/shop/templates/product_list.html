@@ -1,129 +1,86 @@
 {% extends "account/dashboard.html" %}
 {% load i18n static %}
+{% load custom_filters %}
 
 {% block title %} Motosaurio {% endblock %}
 
 {% block extrahead %}
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link type="text/css" rel="stylesheet" href="{% static 'style.css' %}" />
+  <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" />
 {% endblock %}
 
 {% block content %}
   <!-- Content Box with Left Lateral Menu -->
-  <div class="container-fluid">
-    <div class="row">
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Left Lateral Menu -->
+    <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <div class="container mt-4">
+          <label for="searchInput" class="form-label">Buscar por nombre:</label>
+          <input type="text" class="form-control" id="searchInput" placeholder="Nombre">
+        </div>     
+        <div class="container mt-4">
+          <label class="form-label">Filtrar por tipo:</label>
+          {% for product_type in product_types %}
+          <div class="form-check">
+						<input class="form-check-input product-type" type="checkbox" value="{{ product_type }}" id="checkboxType{{ product_type }}" onclick="handleCheckboxClick('checkboxType{{ product_type }}', 'product-type')">
+						<label class="form-check-label" for="checkboxType{{ product_type }}">{{ product_type|parse_product_type|title_value }}</label>
+					</div>
+          {% endfor %}
+        </div>  
+				<div class="container mt-4">
+          <label class="form-label">Filtrar por fabricante:</label>
+          {% for producer in producers %}
+          <div class="form-check">
+						<input class="form-check-input producer" type="checkbox" value="{{ producer }}" id="checkboxProducer{{ producer }}" onclick="handleCheckboxClick('checkboxProducer{{ producer }}', 'producer')">
+						<label class="form-check-label" for="checkboxProducer{{ producer }}">{{ producer|parse_producer|title_value }}</label>
+					</div>
+          {% endfor %}
+				<div class="container mt-4">
+					<button onclick="search()">Buscar</button> 
+				</div>
+      </div>
+    </nav>
+
+    <!-- Content Box -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="mb-4">Lista de productos</h1>
+      </div>
       
-      <!-- Left Lateral Menu -->
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar fixed-top">
-        <div class="sidebar-sticky">
-          <div class="container mt-4">
-            <label for="searchInput" class="form-label">Buscar por nombre:</label>
-            <input type="text" class="form-control" id="searchInput" placeholder="Introduzca el nombre a buscar">
-          </div>     
-          <div class="container mt-4">
-            <label class="form-label">Filtrar por tipo:</label>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="RU" id="checkboxRuedas" onclick="handleCheckboxClick('checkboxRuedas', 'product-type')">
-              <label class="form-check-label" for="checkboxRuedas">Ruedas</label>
+      <div id="product_list">
+        <div class="d-flex flex-wrap">
+          {% for product in products %}
+            <div class="card product-card">
+                {% if product.image %}
+                    <img src="{% static product.image.url %}" class="card-img-top product-img" alt="Product image" width="300" height="300">
+                {% else %}
+                    <img src="{% static 'images/Imagen_no_disponible.png' %}" alt="Imagen no disponible" width="300" height="300">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text">Tipo: {{ product.product_type|parse_product_type|title_value }}</p>
+                    <p class="card-text">Fabricante: {{ product.producer|parse_producer|title_value }}</p>
+                    <p class="card-text">{{ product.price }} €</p>
+                    <a href="#" class="btn btn-primary">Añadir al carrito</a>
+                </div>
             </div>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="MO" id="checkboxMotor" onclick="handleCheckboxClick('checkboxMotor', 'product-type')">
-              <label class="form-check-label" for="checkboxMotor">Motor</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="FR" id="checkboxFrenos" onclick="handleCheckboxClick('checkboxFrenos', 'product-type')">
-              <label class="form-check-label" for="checkboxFrenos">Frenos</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="FI" id="checkboxFiltros" onclick="handleCheckboxClick('checkboxFiltros', 'product-type')">
-              <label class="form-check-label" for="checkboxFiltros">Filtros</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="EM" id="checkboxEmbrague" onclick="handleCheckboxClick('checkboxEmbrague', 'product-type')">
-              <label class="form-check-label" for="checkboxEmbrague">Embrague</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="ES" id="checkboxEscape" onclick="handleCheckboxClick('checkboxEscape', 'product-type')">
-              <label class="form-check-label" for="checkboxEscape">Escape</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="MA" id="checkboxManillar" onclick="handleCheckboxClick('checkboxManillar', 'product-type')">
-              <label class="form-check-label" for="checkboxManillar">Manillar</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input product-type" type="checkbox" value="OT" id="checkboxOtrosType" onclick="handleCheckboxClick('checkboxOtrosType', 'product-type')">
-              <label class="form-check-label" for="checkboxOtrosType">Otros</label>
-            </div>
-          </div>  
-          <div class="container mt-4">
-            <label class="form-label">Filtrar por fabricante:</label>
-            <div class="form-check">
-              <input class="form-check-input producer" type="checkbox" value="KW" id="checkboxKawasaki" onclick="handleCheckboxClick('checkboxKawasaki', 'producer')">
-              <label class="form-check-label" for="checkboxKawasaki">Kawasaki</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input producer" type="checkbox" value="HO" id="checkboxHonda" onclick="handleCheckboxClick('checkboxHonda', 'producer')">
-              <label class="form-check-label" for="checkboxHonda">Honda</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input producer" type="checkbox" value="YA" id="checkboxYamaha" onclick="handleCheckboxClick('checkboxYamaha', 'producer')">
-              <label class="form-check-label" for="checkboxYamaha">Yamaha</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input producer" type="checkbox" value="DU" id="checkboxDucati" onclick="handleCheckboxClick('checkboxDucati', 'producer')">
-              <label class="form-check-label" for="checkboxDucati">Ducati</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input producer" type="checkbox" value="KY" id="checkboxKymco" onclick="handleCheckboxClick('checkboxKymco', 'producer')">
-              <label class="form-check-label" for="checkboxKymco">Kymco</label>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input producer" type="checkbox" value="OT" id="checkboxOtrosProducer" onclick="handleCheckboxClick('checkboxOtrosProducer', 'producer')">
-              <label class="form-check-label" for="checkboxOtrosProducer">Otros</label>
-            </div>
-          </div>      
-          <div class="container mt-4">
-            <button onclick="search()">Buscar</button> 
-          </div>
+          {% endfor %}
         </div>
-      </nav>
-  
-      <!-- Content Box -->
-      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="mb-4">Lista de productos</h1>
-        </div>
-        
-        <div id="product_list">
-          <div class="d-flex flex-wrap">
-            {% for product in products %}
-              <div class="card product-card">
-                  {% if product.image %}
-                      <img src="{% static product.image.url %}" class="card-img-top" alt="Product image" width="300" height="300">
-                  {% else %}
-                      <img src="{% static 'images/Imagen_no_disponible.png' %}" alt="Imagen no disponible" width="300" height="300">
-                  {% endif %}
-                  <div class="card-body">
-                      <h5 class="card-title">{{ product.name }}</h5>
-                      <p class="card-text">{{ product.description }}</p>
-                      <p class="card-text">{{ product.product_type }}</p>
-                      <p class="card-text">{{ product.price }} €</p>
-                      <a href="#" class="btn btn-primary">Añadir al carrito</a>
-                  </div>
-              </div>
-            {% endfor %}
-          </div>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
+
   </div>
-{% endblock %}
+</div>
 
+<script src="{% static 'filter.js' %}"></script>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="{% static 'filter.js' %}"></script>
+{% endblock %}
 
 

@@ -13,14 +13,19 @@ class Product(models.Model):
     ('OT', 'OTROS')
     )
 
+    type_choices_dict = {key: value for key, value in TYPE_CHOICES}
+
     PRODUCER_CHOICES = (
-        ('KW', 'KAWASAKI'), 
+        ('KA', 'KAWASAKI'), 
         ('HO', 'HONDA'), 
         ('YA', 'YAMAHA'), 
         ('DU', 'DUCATI'), 
         ('KY', 'KYMCO'),
         ('OT', 'OTROS') 
     )
+
+    producers_dict = {key: value for key, value in PRODUCER_CHOICES}
+
     name = models.CharField(max_length=200, verbose_name='Título')
     slug = models.SlugField(max_length=200)
     product_type= models.CharField(max_length=255, verbose_name='Tipo de producto', choices=TYPE_CHOICES, default='OT')

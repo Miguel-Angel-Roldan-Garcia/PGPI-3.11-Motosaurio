@@ -1,9 +1,15 @@
 {% load static%}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>{% block title %}{% endblock %}</title>
-    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link href="{% static 'css/base.css' %}" rel="stylesheet">
+	
+	{% block extrahead %}
+	{% endblock %}
 </head>
 <body>
     <div id="header">
@@ -44,9 +50,11 @@
         
      </div>
 
-    <!-- <div id="content"> -->
-        {% block content %}
-        {% endblock %}
-    <!-- </div> -->
+<!-- <div id="content"> -->
+{% block content %}
+{% endblock %}
+<!-- </div> -->
+
+
 </body>
 </html>
