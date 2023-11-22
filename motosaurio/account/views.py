@@ -1,8 +1,9 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm, UserProfileForm
+from motosaurio.models import MiUsuario
 
 def user_login(request):
     if request.method == 'POST':
@@ -21,7 +22,7 @@ def user_login(request):
             else:
                 return HttpResponse('Invalid login')
     else:
-        form = LoginForm()
+        form = LoginForm()  
     return render(request, 'account/login.html', {'form': form})
 
 #@login_required
@@ -44,3 +45,17 @@ def register(request):
     return render(request,
                 'account/register.html',
                 {'user_form': user_form})
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return render(request,
+                          'account/profile_updated.html', 
+                          {'user': request.user})  
+    else:
+        form = UserProfileForm(instance=request.user)
+
+    return render(request, 'account/profile.html', {'form': form})

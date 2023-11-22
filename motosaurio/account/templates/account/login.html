@@ -4,14 +4,9 @@
 
 {% block title %}Log-in{% endblock %}
 
-{% block head %}
-    {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'motosaurio/css/login.css' %}">
-{% endblock %}
-
 {% block content %}
     <h1>Log-in</h1>
-    <p>Please, use the following form to log-in:</p>
+    <p>Por favor, usa el siguiente formulario para loggearte:</p>
     <form method="post">
         {{ form.as_p }}
         {% csrf_token %}
