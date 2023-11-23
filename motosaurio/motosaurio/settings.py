@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-31kt!)_b^q++@_gih&*-)(wx#+k9i*4039ro_5_@ybx6+s==jw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["pgpi-motosaurio.onrender.com"]
+ALLOWED_HOSTS = ["pgpi-motosaurio.onrender.com", "127.0.0.1"]
 
 
 # Application definition
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "shop.apps.ShopConfig"
+    "shop.apps.ShopConfig",
+    "motosaurio"
 ]
 
 MIDDLEWARE = [
@@ -121,6 +122,8 @@ STATIC_URL = "static/"
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+
+AUTH_USER_MODEL = 'motosaurio.MiUsuario'
 
 # MEDIA_URL = 'media/'
 # MEDIA_ROOT = BASE_DIR / 'media'
