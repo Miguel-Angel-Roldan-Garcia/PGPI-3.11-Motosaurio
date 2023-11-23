@@ -2,6 +2,7 @@ from typing import Any
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from cart.forms import CestaAddProductForm
 
 from .models import Product
 
@@ -39,4 +40,6 @@ class ListProducts(TemplateView):
         context['product_types'] = sorted(list(product_types))
         context['producers'] = sorted(set(producers))
         context['section'] = 'dashboard'
+        cesta_product_form = CestaAddProductForm
+        context['cesta_product_form'] = cesta_product_form
         return render(request, template_name=template_name, context = context)
