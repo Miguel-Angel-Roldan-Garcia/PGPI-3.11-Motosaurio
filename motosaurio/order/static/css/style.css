@@ -1,0 +1,12 @@
+.product-img {
+  width: max-content;
+  max-width: 75%;
+  height: auto;
+  margin: 12.5%;
+}
+.product-card {
+    flex: 1;
+    margin: 0 10px;
+    min-width: 250px;
+    max-width: 400px;
+}
