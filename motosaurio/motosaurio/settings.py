@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "shop.apps.ShopConfig",
-    "motosaurio"
+    "motosaurio",
+    "cart.apps.CartConfig"
 ]
 
 MIDDLEWARE = [
@@ -122,6 +123,9 @@ STATIC_URL = "static/"
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+STATIC_ROOT = "shop/static/"
+
+CART_SESSION_ID = "cesta"
 
 AUTH_USER_MODEL = 'motosaurio.MiUsuario'
 
