@@ -1,0 +1,79 @@
+{% extends "account/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+ Tu cesta de la compra
+{% endblock %}
+
+{% block content %}
+    <table class="cesta">
+        <thead>
+        <tr>
+            <th>Imagen</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Eliminar</th>
+            <th>Precio unitario</th>
+            <th>Precio</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in cesta %}
+                {% with product=item.product %}
+                    <tr>
+                        <td>
+                            <a href="{{ product.get_absolute_url }}">
+                                {% if product.image %}
+                                <img src="{% static product.image.url %}" class="card-img-top product-img" alt="Product image" width="150" height="150">
+                                {% else %}
+                                <img src="{% static 'images/Imagen_no_disponible.png' %}" alt="Imagen no disponible" width="150" height="150">
+                                {% endif %}
+                            </a>
+                        </td>
+
+                        <td>{{ product.name }}</td>
+                        <td>
+                            <form action="{% url "cesta:cesta_add" product.id %}" method="post">
+                                 {{ item.update_quantity_form.quantity }}
+                                 {{ item.update_quantity_form.override }}
+                                 <input type="submit" value="Actualizar">
+                                 {% csrf_token %}
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url "cesta:cesta_remove" product.id %}" 
+                            method="post">
+                                <input type="submit" value="Remove">
+                                {% csrf_token %}
+                            </form>
+                        </td>
+                        <td class="num">${{ item.price }}</td>
+                        <td class="num">${{ item.total_price }}</td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            <tr class="total">
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td class="num">${{ cesta.get_total_price }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="{% url 'dashboard' %}" class="button
+        light">Continúa comprando</a>
+        <a href="#" class="button">Pagar</a>
+    </p>
+
+    <script>
+        function aumentarCantidad(cantidad_id) {
+            var cantidad = document.getElementById(cantidad_id);
+            cantidad.stepUp();
+        }
+      
+        function disminuirCantidad(cantidad_id) {
+            var cantidad = document.getElementById(cantidad_id);
+            cantidad.stepDown();
+        }
+    </script>
+{% endblock %}
