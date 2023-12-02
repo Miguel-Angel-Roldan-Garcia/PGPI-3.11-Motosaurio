@@ -18,6 +18,7 @@ class Order(models.Model):
     direccion = models.CharField('Dirección', max_length=200)
     cod_postal = models.IntegerField('Código postal')
     tipo_pago = models.TextField("", choices = tipos_pago)
+    total_price = models.FloatField(default=0)
 
     def __str__(self):
         return "Order " + str(self.id)
