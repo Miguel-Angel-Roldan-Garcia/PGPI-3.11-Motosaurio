@@ -11,5 +11,5 @@ class OrderForm(forms.Form):
     email = forms.EmailField()
     direction = forms.CharField()
     postal_code = forms.IntegerField()
-    payment_type = forms.ChoiceField(choices = tipos_pago, initial='Cr', help_text = "Método de pago")
-    card_number = forms.IntegerField(help_text = "", required=False)
+    payment_type = forms.ChoiceField(choices = tipos_pago, initial='T', help_text = "Método de pago")
+    card_number = forms.CharField(max_length = 16, min_length = 16, required=False)

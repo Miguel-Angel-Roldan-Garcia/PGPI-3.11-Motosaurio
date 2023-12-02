@@ -3,6 +3,15 @@
 {% load custom_filters %}
 
 {% block title %} Datos de envío y pago {% endblock %}
+{% block extrahead %}
+<style>
+    .form-row-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -17,7 +26,7 @@
                     <ul>
                         {% for item in cesta %}
                             {% with product=item.product %}
-                        <li>{{ product.name }} {{ product.quantity }}</li>
+                        <li>{{ item.quantity }} unidades: {{ product.name }}</li>
                             {% endwith %}
                         {% endfor %}
                     </ul>
@@ -36,46 +45,52 @@
                         {% csrf_token %}
                         
                         <h4> Datos del cliente </h4>
-                        <div class="form-group">
+                        <div class="form-row-container">
                             <label for="{{ form.name.id_for_label }}">Nombre: </label>
-                            <input type="text" class="form-control" name="first_name" id="{{ form.name.id_for_input }}">
+                            <input type="text" class="form-control" name="first_name" id="{{ form.name.id_for_input }}" value="{{ form.name.data }}" required>
+                            {{ form.name.errors }}
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-row-container">
                             <label for="{{ form.email.id_for_label }}">Correo electrónico: </label>
-                            <input type="email" class="form-control" name="email" maxlength="320" id="{{ form.email.id_for_label }}">
+                            <input type="email" class="form-control" name="email" maxlength="320" id="{{ form.email.id_for_label }}" value="{{ form.email.data }}" required>
+                            {{ form.email.errors }}
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-row-container">
                             <label for="{{ form.direction.id_for_label }}">Dirección: </label>
-                            <input type="text" class="form-control" name="direction" id="{{ form.direction.id_for_label }}">
+                            <input type="text" class="form-control" name="direction" id="{{ form.direction.id_for_label }}" value="{{ form.direction.data }}" required>
+                            {{ form.direction.errors }}
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-row-container">
                             <label for="{{ form.postal_code.id_for_label }}">Código postal: </label>
-                            <input type="number" class="form-control" name="postal_code"id="{{ form.postal_code.id_for_label }}">
+                            <input type="number" class="form-control" name="postal_code" id="{{ form.postal_code.id_for_label }}" value="{{ form.postal_code.data }}" required>
+                            {{ form.postal_code.errors }}
                         </div>
 
                         <!-- Payment method selector -->
-                        <div class="form-group">
+                        <div class="form-row-container">
                             <h4> Datos de pago </h4>
                             <label for="{{ form.payment_type.id_for_label }}">Método de pago:</label>
-                            <select class="form-control" id="id_payment_type" name="payment_type">
-                                <option value="Cr">Contrareembolso</option>
+                            <select class="form-control" id="{{ form.payment_type.id_for_label }}" name="payment_type" onchange="handlePaymentTypeAction()">
                                 <option value="T">Tarjeta</option>
+                                <option value="Cr">Contrareembolso</option>
                             </select>
+                            {{ form.payment_type.errors }}
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-row-container">
                             <label for="{{ form.card_number.id_for_label }}">Tarjeta</label>
-                            <input type="number" class="form-control" name="card_number" id="{{ form.card_number.id_for_label }}">
+                            <input type="text" class="form-control" name="card_number" id="{{ form.card_number.id_for_label }}" value="{{ form.card_number.data }}" {% if form.payment_type.data == 'Cr' %}disabled="true"{% endif %}>
+                            {{ form.card_number.errors }}
                         </div>
 
                         <!-- Price and Buy Button -->
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label for="price">Price:</label>
-                                <p id="price">{{ cesta.get_total_price }}</p>
+                                <p id="price">{{ cesta.get_total_price }}€</p>
                             </div>
                             <div class="col-md-6 text-right">
                                 <button type="submit" class="btn btn-success">Buy</button>
@@ -87,6 +102,20 @@
         </div>
     </div>
 </div>
+
+{% if form.payment_type.data == 'Cr' %}
+<script>
+    document.getElementById("{{ form.payment_type.id_for_label }}").selectedIndex = 1;
+</script>
+{% endif %}
+
+<script>  
+    function handlePaymentTypeAction() {
+        const option = document.getElementById("{{ form.payment_type.id_for_label }}");
+        document.getElementById("{{ form.card_number.id_for_label }}")["disabled"] = option.value == "Cr";
+    };
+</script>
+
 <!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

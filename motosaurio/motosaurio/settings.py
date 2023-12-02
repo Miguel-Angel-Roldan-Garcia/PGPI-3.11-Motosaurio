@@ -137,3 +137,6 @@ AUTH_USER_MODEL = 'motosaurio.MiUsuario'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+STRIPE_PUBLIC_KEY = 'pk_test_51OIwh4AbTIOTrvYZdezJqeEaEHX2W8v13joEpO3iDVKLkDUBTNCIisLXZLjHQgeqi58imwmOHnKGjhe0zUiLGIdO00XtizefPy'
+STRIPE_SECRET_KEY = 'sk_test_51OIwh4AbTIOTrvYZyleE78fZiAJ7dfgvhCqLlyLNwKWmS41c26eDb8YHGNygg63emw5iwLXhm0kN0OcgjEi2Df6L00yF4pZBmF'
