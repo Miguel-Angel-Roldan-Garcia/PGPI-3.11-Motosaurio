@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-31kt!)_b^q++@_gih&*-)(wx#+k9i*4039ro_5_@ybx6+s==jw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["pgpi-motosaurio.onrender.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["pgpi-motosaurio.onrender.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "shop.apps.ShopConfig",
     "motosaurio",
-    "cart.apps.CartConfig"
+    "cart.apps.CartConfig",
+    "order.apps.OrderConfig"
 ]
 
 MIDDLEWARE = [

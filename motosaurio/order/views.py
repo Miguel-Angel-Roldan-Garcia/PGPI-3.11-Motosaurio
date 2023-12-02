@@ -1,8 +1,24 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.conf import settings
+
+from cart.cesta import Cesta
+
+from .forms import OrderForm
 
 # Create your views here.
 
-class OrderInformation(TemplateView):
-    def getInformation(request):
-        return render(request)
+class CheckoutOrder(TemplateView):
+    
+    def get(self, request, *args, **kwargs):
+        template_name = "checkout_order.html"
+        context = {}
+
+        context["form"] = OrderForm()
+        context["cesta"] = Cesta(request)
+
+        return render(request, template_name = template_name, context = context)
+    
+    def post(self, request, *args, **kwargs):
+
+        return redirect("dashboard")

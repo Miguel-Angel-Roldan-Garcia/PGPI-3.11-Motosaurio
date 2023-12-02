@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% load custom_filters %}
+
+{% block title %} Datos de envío y pago {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left half of the screen - Cart -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Carrito
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for item in cesta %}
+                            {% with product=item.product %}
+                        <li>{{ product.name }} {{ product.quantity }}</li>
+                            {% endwith %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right half of the screen - Buy Form and Price -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Datos de compra
+                </div>
+                <div class="card-body">
+                    <form id="buyForm" style="overflow: hidden" method="post">
+                        {% csrf_token %}
+                        
+                        <h4> Datos del cliente </h4>
+                        <div class="form-group">
+                            <label for="{{ form.name.id_for_label }}">Nombre: </label>
+                            <input type="text" class="form-control" name="first_name" id="{{ form.name.id_for_input }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">Correo electrónico: </label>
+                            <input type="email" class="form-control" name="email" maxlength="320" id="{{ form.email.id_for_label }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.direction.id_for_label }}">Dirección: </label>
+                            <input type="text" class="form-control" name="direction" id="{{ form.direction.id_for_label }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.postal_code.id_for_label }}">Código postal: </label>
+                            <input type="number" class="form-control" name="postal_code"id="{{ form.postal_code.id_for_label }}">
+                        </div>
+
+                        <!-- Payment method selector -->
+                        <div class="form-group">
+                            <h4> Datos de pago </h4>
+                            <label for="{{ form.payment_type.id_for_label }}">Método de pago:</label>
+                            <select class="form-control" id="id_payment_type" name="payment_type">
+                                <option value="Cr">Contrareembolso</option>
+                                <option value="T">Tarjeta</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.card_number.id_for_label }}">Tarjeta</label>
+                            <input type="number" class="form-control" name="card_number" id="{{ form.card_number.id_for_label }}">
+                        </div>
+
+                        <!-- Price and Buy Button -->
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="price">Price:</label>
+                                <p id="price">{{ cesta.get_total_price }}</p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button type="submit" class="btn btn-success">Buy</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% endblock %}
