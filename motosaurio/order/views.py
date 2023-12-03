@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.conf import settings
+from django.db import transaction
 
 from cart.cesta import Cesta
 from shop.models import Product
@@ -9,12 +10,22 @@ from .forms import OrderForm
 from .models import Order, CartItem
 
 import stripe
+from decimal import Decimal
 
 class CheckoutOrder(TemplateView):
     
     def get(self, request, *args, **kwargs):
         template_name = "checkout_order.html"
         context = {}
+        
+        order_created_id = request.session.get("order_created_id")
+        if order_created_id:
+            request.session["order_created_id"] = None
+            request.session.modified = True
+            try:
+                Order.objects.get(id = order_created_id).delete()    
+            except Order.DoesNotExist:
+                pass
 
         form = OrderForm()
 
@@ -23,7 +34,7 @@ class CheckoutOrder(TemplateView):
             form["first_name"].initial = user.first_name
             form["email"].initial = user.email
             form["postal_code"].initial = user.direccion
-            form["card_number"] .initial = user.tarjeta
+            # form["card_number"] .initial = user.tarjeta
 
         context["form"] = form
         context["cesta"] = Cesta(request)
@@ -31,6 +42,35 @@ class CheckoutOrder(TemplateView):
         return render(request, template_name = template_name, context = context)
     
     def post(self, request, *args, **kwargs):
+
+        @transaction.atomic
+        def create_order(user, form, cesta):
+            delivery_type = form["delivery_type"]
+            final_price = cesta.get_total_price()
+
+            if final_price <= 30:
+                if delivery_type.data == "D":
+                    final_price += Decimal("4.99")
+                elif delivery_type.data == "R":
+                    final_price += Decimal("3.99")
+
+            order = Order(customer = user, \
+                          first_name = form["first_name"].data, \
+                          email = form["email"].data, \
+                          direccion = form["direction"].data, \
+                          cod_postal = form["postal_code"].data, \
+                          tipo_pago = form["payment_type"].data, \
+                          total_price = final_price, \
+                          delivery_type = delivery_type
+                        )
+            order.save()
+
+            for k,v in cesta.cesta.items():
+                cart_item = CartItem(item = Product.objects.get(id = k), quantity = v["quantity"], order = order)
+                cart_item.save()
+            
+            return order
+
         form = OrderForm(request.POST)
         cesta = Cesta(request)
 
@@ -40,23 +80,28 @@ class CheckoutOrder(TemplateView):
             else:
                 user = None
 
-            order = Order(customer = user, \
-                          first_name = form["first_name"].data, \
-                          email = form["email"].data, \
-                          direccion = form["direction"].data, \
-                          cod_postal = form["postal_code"].data, \
-                          tipo_pago = form["payment_type"].data, \
-                          total_price = cesta.get_total_price()
-                        )
-            order.save()
+            order_created_id = request.session.get("order_created_id")
 
-            for k,v in cesta.cesta.items():
-                cart_item = CartItem(item = Product.objects.get(id = k), quantity = v["quantity"], order = order)
-                cart_item.save()
+            if order_created_id:
+                try:
+                    Order.objects.get(id = order_created_id).delete()
+                except Order.DoesNotExist:
+                    pass
+
+            order = create_order(user, form, cesta)
+            order_created_id = request.session["order_created_id"] = order.id
+            request.session.modified = True
 
             if order.tipo_pago == "T":
+                # Credit card
                 return redirect(f"/order/{order.id}/stripe")
             else:
+                # Contrareembolso
+                # Empty cart and send confirmation email
+                request.session["order_created_id"] = None
+                request.session[settings.CART_SESSION_ID] = None
+                request.session.modified = True
+
                 return redirect("dashboard")
         else:
             template_name = "checkout_order.html"
@@ -95,12 +140,27 @@ class StripeCheckout(TemplateView):
             )
 
             # Payment was successful
-            # Perform additional actions (e.g., update database, send confirmation email)
+            # Empty cart and send confirmation email
+            request.session["order_created_id"] = None
+            request.session[settings.CART_SESSION_ID] = None
+            request.session.modified = True
+
             return redirect('dashboard')
 
         except stripe.error.CardError as e:
             # Card was declined
             error_message = str(e)
-            return render(request, 'stripe_checkout.html', {'error_message': error_message})
+
+            stripe.public_key = settings.STRIPE_PUBLIC_KEY
+            order = Order.objects.get(id = order_id)
+
+            context = {
+                "stripe_public_key": stripe.public_key,
+                "final_price": order.total_price,
+                "order_id": order.id,
+                'error_message': error_message
+            }
+            
+            return render(request, 'stripe_checkout.html', context)
 
         

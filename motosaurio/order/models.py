@@ -12,6 +12,11 @@ class Order(models.Model):
         ["T", "Tarjeta"]
     ]
 
+    tipos_envio = [
+        ["D", "A domicilio"],
+        ["R", "Recoger en tienda"]
+    ]
+
     customer = models.ForeignKey(MiUsuario, null=True, on_delete=models.SET_NULL)
     first_name = models.CharField('Nombre', max_length=200)
     email = models.EmailField('Correo elecrónico')
@@ -19,6 +24,7 @@ class Order(models.Model):
     cod_postal = models.IntegerField('Código postal')
     tipo_pago = models.TextField("", choices = tipos_pago)
     total_price = models.FloatField(default=0)
+    delivery_type = models.TextField("", choices = tipos_envio)
 
     def __str__(self):
         return "Order " + str(self.id)

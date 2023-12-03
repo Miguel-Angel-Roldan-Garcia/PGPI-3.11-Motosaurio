@@ -25,7 +25,7 @@
                     <ul>
                         {% for item in cesta %}
                             {% with product=item.product %}
-                        <li>{{ item.quantity }} unidades: {{ product.name }}</li>
+                        <li> {{ item.quantity }} unidades: {{ product.name }}</li>
                             {% endwith %}
                         {% endfor %}
                     </ul>
@@ -42,7 +42,7 @@
                 <div class="card-body">
                     <form id="buyForm" style="overflow: hidden" method="post">
                         {% csrf_token %}
-                        
+
                         <h4> Datos del cliente </h4>
                         <div class="form-row-container">
                             <label for="{{ form.name.id_for_label }}">Nombre: </label>
@@ -79,11 +79,28 @@
                             {{ form.payment_type.errors }}
                         </div>
 
+                        <div class="form-row-container">
+                            <h4> Forma de envío </h4>
+                            <label for="{{ form.delivery_type.id_for_label }}">Forma de envío:</label>
+                            <select class="form-control" id="{{ form.delivery_type.id_for_label }}" name="delivery_type">
+                                <option value="D">A domicilio</option>
+                                <option value="R">Recoger en tienda</option>
+                            </select>
+                            {{ form.delivery_type.errors }}
+                        </div>
+
+                        <div class="form-row-container">
+                            <h5> Precios de envío </h5>
+                            <span>A domicilio: 4,99 €</span>
+                            <span>Recoger en tienda: 3,99€</span>
+                            <span>Pedidos de más de 30€: Gratis</span>
+                        </div>  
+
                         <!-- Price and Buy Button -->
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label for="price">Price:</label>
-                                <p id="price">{{ cesta.get_total_price }}€</p>
+                                <p id="price">{{ cesta.get_total_price }} €</p>
                             </div>
                             <div class="col-md-6 text-right">
                                 <button type="submit" class="btn btn-success">Buy</button>
@@ -99,6 +116,12 @@
 {% if form.payment_type.data == 'Cr' %}
 <script>
     document.getElementById("{{ form.payment_type.id_for_label }}").selectedIndex = 1;
+</script>
+{% endif %}
+
+{% if form.delivery_type.data == 'R' %}
+<script>
+    document.getElementById("{{ form.delivery_type.id_for_label }}").selectedIndex = 1;
 </script>
 {% endif %}
 
