@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %} Stripe {% endblock %}
+
+{% block content %}
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <form action="{% url 'stripe_checkout' order_id %}" method="post" id="payment-form">
+    {% csrf_token %}
+    <!-- Display the order details and dynamically set the amount -->
+    <p>Total del pedido: ${{ final_price }} €</p>
+
+    <div id="card-element"></div>
+    <button id="submit-button">Pagar</button>
+  </form>
+
+  <div>
+      {{ error_message }}
+  </div>
+
+  <script>
+    var stripe = Stripe('{{ stripe_public_key }}');
+    var elements = stripe.elements();
+
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    var form = document.getElementById('payment-form');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      stripe.createToken(card).then(function (result) {
+        if (result.error) {
+          // Show error to the user
+          console.error(result.error.message);
+        } else {
+          // Send the token to your server
+          // You can use AJAX to send the token to your Django view
+          console.log(result.token);
+
+          // Append the token to the form before submitting
+          var hiddenInput = document.createElement('input');
+          hiddenInput.setAttribute('type', 'hidden');
+          hiddenInput.setAttribute('name', 'stripeToken');
+          hiddenInput.setAttribute('value', result.token.id);
+          form.appendChild(hiddenInput);
+
+          // Submit the form
+          form.submit();
+        }
+      });
+    });
+  </script>
+{% endblock %}
