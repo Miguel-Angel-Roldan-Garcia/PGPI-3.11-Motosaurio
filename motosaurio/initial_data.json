@@ -240,5 +240,16 @@
     "created": "2023-11-20T11:43:12.121Z",
     "updated": "2023-11-20T11:43:13.076Z"
   }
+},
+{
+  "model": "empresa.empresa",
+  "pk": 1,
+  "fields": {
+    "nombre": "Motosaurus",
+    "email": "motosaurus@motosaurus.com",
+    "direccion": "calle motosaurus sn",
+    "telefono": "928753614",
+    "descripcion": "Somos una pequeña empresa con una gran pasión por las motos. Nuestros motores rugen con la fuerza de un dinosaurio"   
+  }
 }
 ]

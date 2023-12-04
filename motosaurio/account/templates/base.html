@@ -1,49 +1,80 @@
-{% load static%}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link href="{% static 'css/base.css' %}" rel="stylesheet">
-	
-	{% block extrahead %}
-	{% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+
+    <style>
+        /* Estilos específicos para el menú */
+        .menu li {
+            font-size: 30px;
+            margin-right: 30px;
+        }
+
+        /* Otros estilos según sea necesario */
+        .cart {
+            font-size: 16px;
+        }
+    </style>
+
+    {% block extrahead %}
+    {% endblock %}
 </head>
+
 <body>
     <div id="header">
         <span class="logo"><img src="{% static 'images/Logo.png' %}" alt="Logo"></span>
+
         <style>
             .menu li {
                 font-size: 30px; 
             }
         </style>
-        
-            <ul class="menu">
-                <li {% if section == "dashboard" %}class="selected"{% endif %}>
-                    <a href="{% url 'dashboard' %}">Catálogo</a>
-                </li>
-                <li {% if section == "images" %}class="selected"{% endif %}>
-                    <a href="../cesta">Carrito</a>
-                </li>
-                <li {% if section == "people" %}class="selected"{% endif %}>
-                    <a href="{% url 'perfil' %}">Perfil</a>
-                </li>
-                <li {% if section == "empresa" %}class="selected"{% endif %}>
+
+  
+        <ul class="menu">
+            <li {% if section == "dashboard" %}class="selected"{% endif %}>
+                <a href="{% url 'dashboard' %}">Catálogo</a>
+            </li>
+            <li {% if section == "images" %}class="selected"{% endif %}>
+                <a href="../cesta">Carrito</a>
+                <div class="cart">
+                    {% with total_items=cart|length %}
+                        {% if total_items > 0 %}
+                            
+                            <a href="{% url "cesta:cesta_detail" %}">
+                                {{ total_items }} item{{ total_items|pluralize }},
+                                ${{ cart.get_total_price }}
+                            </a>
+                        {% else %}
+                        
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </li>
+            <li {% if section == "people" %}class="selected"{% endif %}>
+                <a href="{% url 'perfil' %}">Perfil</a>
+            </li>
+            <li {% if section == "empresa" %}class="selected"{% endif %}>
                     <a href="../empresa">Empresa</a>
-                </li>
-                <li {% if section == "empresa" %}class="selected"{% endif %}>
+            </li>
+            <li {% if section == "reclamaciones" %}class="selected"{% endif %}>
                     <a href="../reclamaciones">Reclamaciones</a>
-                </li>
-            </ul>  
-        
+            </li>
+            
+        </ul>
         <style>
 
             .user {
                 font-size: 20px; 
             }
-        </style>    
+        </style>
 
         <span class="user">
             {% if request.user.is_authenticated %}
@@ -53,14 +84,12 @@
                 <a href="{% url "login" %}">Log-in</a>
             {% endif %}
         </span>
-        
-     </div>
 
-<!-- <div id="content"> -->
-{% block content %}
-{% endblock %}
-<!-- </div> -->
+    </div>
 
+    {% block content %}
+    {% endblock %}
 
 </body>
+
 </html>
