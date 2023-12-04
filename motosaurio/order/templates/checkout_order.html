@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %} Datos de envío y pago {% endblock %}
+{% block extrahead %}
+<style>
+    .form-row-container {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left half of the screen - Cart -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Carrito
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for item in cesta %}
+                            {% with product=item.product %}
+                        <li> {{ item.quantity }} unidades: {{ product.name }}</li>
+                            {% endwith %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right half of the screen - Buy Form and Price -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Datos de compra
+                </div>
+                <div class="card-body">
+                    <form id="buyForm" style="overflow: hidden" method="post">
+                        {% csrf_token %}
+
+                        <h4> Datos del cliente </h4>
+                        <div class="form-row-container">
+                            <label for="{{ form.name.id_for_label }}">Nombre: </label>
+                            <input type="text" class="form-control" name="first_name" id="{{ form.first_name.id_for_input }}" value="{{ form.first_name.data|default:form.first_name.initial }}" required>
+                            {{ form.name.errors }}
+                        </div>
+
+                        <div class="form-row-container">
+                            <label for="{{ form.email.id_for_label }}">Correo electrónico: </label>
+                            <input type="email" class="form-control" name="email" maxlength="320" id="{{ form.email.id_for_label }}" value="{{ form.email.data|default:form.email.initial }}" required>
+                            {{ form.email.errors }}
+                        </div>
+
+                        <div class="form-row-container">
+                            <label for="{{ form.direction.id_for_label }}">Dirección: </label>
+                            <input type="text" class="form-control" name="direction" id="{{ form.direction.id_for_label }}" value="{{ form.direction.data|default:form.direction.initial }}" required>
+                            {{ form.direction.errors }}
+                        </div>
+
+                        <div class="form-row-container">
+                            <label for="{{ form.postal_code.id_for_label }}">Código postal: </label>
+                            <input type="number" class="form-control" name="postal_code" id="{{ form.postal_code.id_for_label }}" value="{{ form.postal_code.data|default:form.postal_code.initial }}" required>
+                            {{ form.postal_code.errors }}
+                        </div>
+
+                        <!-- Payment method selector -->
+                        <div class="form-row-container">
+                            <h4> Datos de pago </h4>
+                            <label for="{{ form.payment_type.id_for_label }}">Método de pago:</label>
+                            <select class="form-control" id="{{ form.payment_type.id_for_label }}" name="payment_type">
+                                <option value="T">Tarjeta</option>
+                                <option value="Cr">Contrareembolso</option>
+                            </select>
+                            {{ form.payment_type.errors }}
+                        </div>
+
+                        <div class="form-row-container">
+                            <h4> Forma de envío </h4>
+                            <label for="{{ form.delivery_type.id_for_label }}">Forma de envío:</label>
+                            <select class="form-control" id="{{ form.delivery_type.id_for_label }}" name="delivery_type">
+                                <option value="D">A domicilio</option>
+                                <option value="R">Recoger en tienda</option>
+                            </select>
+                            {{ form.delivery_type.errors }}
+                        </div>
+
+                        <div class="form-row-container">
+                            <h5> Precios de envío </h5>
+                            <span>A domicilio: 4,99 €</span>
+                            <span>Recoger en tienda: 3,99€</span>
+                            <span>Pedidos de más de 30€: Gratis</span>
+                        </div>  
+
+                        <!-- Price and Buy Button -->
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="price">Price:</label>
+                                <p id="price">{{ cesta.get_total_price }} €</p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <button type="submit" class="btn btn-success">Buy</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if form.payment_type.data == 'Cr' %}
+<script>
+    document.getElementById("{{ form.payment_type.id_for_label }}").selectedIndex = 1;
+</script>
+{% endif %}
+
+{% if form.delivery_type.data == 'R' %}
+<script>
+    document.getElementById("{{ form.delivery_type.id_for_label }}").selectedIndex = 1;
+</script>
+{% endif %}
+
+<!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% endblock %}
