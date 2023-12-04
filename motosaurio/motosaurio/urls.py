@@ -22,9 +22,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
     path('cesta/', include('cart.urls', namespace='cesta')),
+    path('reclamaciones/', include('reclamaciones.urls', namespace='reclamaciones')),
     path('empresa/', include('empresa.urls', namespace='empresa')),
     path("order/", include("order.urls")),
-
 ]
 
 # if settings.DEBUG:

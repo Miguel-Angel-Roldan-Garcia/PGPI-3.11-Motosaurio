@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "shop.apps.ShopConfig",
     "motosaurio",
     "cart.apps.CartConfig",
+    "reclamaciones.apps.ReclamacionesConfig",
     "empresa.apps.EmpresaConfig",
     "order.apps.OrderConfig"
 
