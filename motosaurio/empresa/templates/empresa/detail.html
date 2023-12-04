@@ -1,0 +1,27 @@
+{% extends "account/dashboard.html" %}
+{% load static %}
+
+{% block title %}
+    Nuestra Empresa
+{% endblock %}
+
+{% block content %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="mb-4">Nuestra Empresa</h1>
+    </div>
+        <tbody>
+            <p><b><span style="font-size: larger;">Nombre:</span></b></th>
+                {{empresa.nombre}} <br><br>
+            <th><b><span style="font-size: larger;">Correo electrónico:</span> </b></th>
+                {{empresa.email}}<br><br>
+            <th><b><span style="font-size: larger;">Dirección postal:</span></b></th>
+                {{empresa.direccion}}<br><br>
+            <th><b><span style="font-size: larger;">Teléfono:</span></b></th>
+                {{empresa.telefono}}<br><br>
+            <th><b><span style="font-size: larger;">Sobre nosotros:</span></b></th>
+                {{empresa.descripcion}}<br><br>
+
+            
+        </tbody>
+{% endblock %}

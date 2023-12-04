@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     "shop.apps.ShopConfig",
     "motosaurio",
     "cart.apps.CartConfig",
+    "empresa.apps.EmpresaConfig",
     "order.apps.OrderConfig"
+
 ]
 
 MIDDLEWARE = [

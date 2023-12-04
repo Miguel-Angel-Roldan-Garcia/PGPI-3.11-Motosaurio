@@ -31,6 +31,12 @@
     <div id="header">
         <span class="logo"><img src="{% static 'images/Logo.png' %}" alt="Logo"></span>
 
+        <style>
+            .menu li {
+                font-size: 30px; 
+            }
+        </style>
+  
         <ul class="menu">
             <li {% if section == "dashboard" %}class="selected"{% endif %}>
                 <a href="{% url 'dashboard' %}">Catálogo</a>
@@ -54,7 +60,17 @@
             <li {% if section == "people" %}class="selected"{% endif %}>
                 <a href="{% url 'perfil' %}">Perfil</a>
             </li>
+            <li {% if section == "empresa" %}class="selected"{% endif %}>
+                    <a href="../empresa">Empresa</a>
+            </li>
+            
         </ul>
+        <style>
+
+            .user {
+                font-size: 20px; 
+            }
+        </style>
 
         <span class="user">
             {% if request.user.is_authenticated %}
