@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from cart.cesta import Cesta
 from shop.models import Product
@@ -163,4 +165,24 @@ class StripeCheckout(TemplateView):
             
             return render(request, 'stripe_checkout.html', context)
 
+@method_decorator(login_required(login_url='/account/login'), name='dispatch')
+class ListOrdersUser(TemplateView):
+    template_name = 'list_orders_user.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        orders = Order.objects.filter(customer = user)
+        context["orders"] = list()
+
+        for order in orders:
+            context["orders"].append((order, list(CartItem.objects.filter(order = order))))
+
         
+
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)   

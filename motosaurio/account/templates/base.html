@@ -36,7 +36,6 @@
                 font-size: 30px; 
             }
         </style>
-
   
         <ul class="menu">
             <li {% if section == "dashboard" %}class="selected"{% endif %}>
@@ -67,8 +66,12 @@
             <li {% if section == "reclamaciones" %}class="selected"{% endif %}>
                     <a href="../reclamaciones">Reclamaciones</a>
             </li>
+            <li {% if section == "orders" %}class="selected"{% endif %}>
+                <a href="{% url 'list-orders-user' %}">Mis pedidos</a>
+            </li>
             
         </ul>
+
         <style>
 
             .user {

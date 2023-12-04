@@ -28,6 +28,20 @@ class Order(models.Model):
 
     def __str__(self):
         return "Order " + str(self.id)
+    
+    @property
+    def legible_tipo_pago(self):
+        for tipo in self.tipos_pago:
+            if tipo[0] == self.tipo_pago:
+                return tipo[1]
+        return None
+    
+    @property
+    def legible_tipo_envio(self):
+        for tipo in self.tipos_envio:
+            if tipo[0] == self.delivery_type:
+                return tipo[1]
+        return None
 
 class CartItem(models.Model):
     item = models.ForeignKey(Product, on_delete=models.CASCADE)
