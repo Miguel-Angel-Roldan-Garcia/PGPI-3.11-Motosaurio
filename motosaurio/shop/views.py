@@ -1,6 +1,6 @@
 from typing import Any
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 from cart.forms import CestaAddProductForm
 
@@ -43,3 +43,18 @@ class ListProducts(TemplateView):
         cesta_product_form = CestaAddProductForm
         context['cesta_product_form'] = cesta_product_form
         return render(request, template_name=template_name, context = context)
+
+class ProductDetailView(TemplateView):
+    template_name = "product_detail.html"  # Ajusta según tu estructura de templates
+
+    def get(self, request, *args, **kwargs):
+        product_id = kwargs.get('pk')
+        product_slug = kwargs.get('slug')
+        product = get_object_or_404(Product, id=product_id, slug=product_slug)
+
+        context = {
+            'product': product,
+            'section': 'product_detail',
+        }
+
+        return render(request, template_name=self.template_name, context=context)
