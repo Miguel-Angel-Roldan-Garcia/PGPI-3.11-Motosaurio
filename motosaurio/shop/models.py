@@ -41,7 +41,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def get_absolute_url(self):
-        return reverse('shop:product_detail', args=[str(self.id), self.slug])
+        return reverse('shop:product_detail', args=[str(self.id)])
     
     class Meta:
         ordering = ['name']

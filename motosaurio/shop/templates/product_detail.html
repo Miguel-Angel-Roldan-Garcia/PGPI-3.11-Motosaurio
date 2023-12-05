@@ -1,0 +1,60 @@
+    {% extends "account/dashboard.html" %}
+    {% load i18n static %}
+    {% load custom_filters %}
+    {% load custom_tags %}
+
+
+    {% block title %} Motosaurio {% endblock %}
+
+    {% block extrahead %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+        table {
+        width: 100%; /* Set the table width to 100% to make it responsive */
+        border-collapse: collapse; /* Remove spacing between table cells */
+        }
+
+        th, td {
+        min-width: 100px; /* Set a minimum width for all table header and data cells */
+        padding: 10px; /* Add padding for better appearance, adjust as needed */
+        border: 1px solid #ddd; /* Add borders for better visibility, adjust as needed */
+        }
+    </style>
+    {% endblock %}
+
+    {% block content %}
+
+        <!-- Content Box -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="mb-4" style="font-size: 3em;">{{ product.name }}</h1>
+            </div>
+        
+            <div class="product-detail">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+            <h2 style="font-size: 1.2em;">
+                <a>
+                Tipo de producto: {{ product.product_type|parse_product_type|title_value }}
+                </a>
+            </h2>
+            <p class="price" style="font-size: 1.2em;">Precio: {{ product.price }}€</p>
+            <p style="font-size: 1.1em;">Descripción: {{ product.description|linebreaks }}</p>
+            {% if product.available %}
+            <form action="{% url 'cesta:cesta_add' product.id %}" method="post">
+                {{ cesta_product_form }}
+                {% csrf_token %}
+                <input type="submit" value="Añadir al carrito">
+            </form>
+            {% else %}
+            <p><span style="color: red;">PRODUCTO AGOTADO</span></p>
+                {% endif %}
+            </div>
+        </main>
+        
+    <script src="{% static 'filter.js' %}"></script>
+
+    <!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    {% endblock %}

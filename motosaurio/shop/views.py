@@ -45,12 +45,11 @@ class ListProducts(TemplateView):
         return render(request, template_name=template_name, context = context)
 
 class ProductDetailView(TemplateView):
-    template_name = "product_detail.html"  # Ajusta según tu estructura de templates
+    template_name = "product_detail.html"  
 
     def get(self, request, *args, **kwargs):
         product_id = kwargs.get('pk')
-        product_slug = kwargs.get('slug')
-        product = get_object_or_404(Product, id=product_id, slug=product_slug)
+        product = get_object_or_404(Product, id=product_id)
 
         context = {
             'product': product,
