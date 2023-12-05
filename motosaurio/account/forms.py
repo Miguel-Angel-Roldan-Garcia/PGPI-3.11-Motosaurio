@@ -1,5 +1,6 @@
 from django import forms
 from motosaurio.models import MiUsuario
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Nombre de usuario')
@@ -15,7 +16,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     class Meta:
         model = MiUsuario
-        fields = ['username', 'first_name', 'email', 'direccion']
+        fields = ['username', 'first_name', 'email', 'direccion','codigo']
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -26,7 +27,20 @@ class UserRegistrationForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     tarjeta = forms.IntegerField(label='Tarjeta de crédito', required=False)
     direccion = forms.CharField(label='Dirección postal', required=False)
+    codigo = forms.IntegerField(label='Código postal',validators=[MaxValueValidator(99999),MinValueValidator(00000)], required=False)
     class Meta:
         model = MiUsuario
-        fields = ['direccion']
+        fields = ['direccion','codigo','tarjeta']
+
+    def codigo_invalido(self):
+        cd = self.cleaned_data
+        if cd['codigo'] == None:
+            raise forms.ValidationError('El código postal es obligatorio')
+        return cd['codigo']
+
+    def direccion_invalida(self):
+        cd = self.cleaned_data
+        if cd['direccion'] == '':
+            raise forms.ValidationError('La dirección es obligatoria')
+        return cd['direccion']
 

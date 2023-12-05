@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, UserRegistrationForm, UserProfileForm
 from motosaurio.models import MiUsuario
+from django import forms
 
 def user_login(request):
     if request.method == 'POST':
@@ -50,11 +51,18 @@ def register(request):
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return render(request,
-                          'account/profile_updated.html', 
-                          {'user': request.user})  
+        try:
+            if form.is_valid():
+                user = request.user
+                user.direccion =form.direccion_invalida()
+                user.codigo =form.codigo_invalido()
+                user.save()
+                return render(request,
+                            'account/profile_updated.html', 
+                            {'user': request.user}) 
+        except forms.ValidationError as e:
+            error_message = 'Tanto la dirección como el código postal deben estar cumplimentados'
+            return render(request, 'account/error.html', {'error_message': error_message}) 
     else:
         form = UserProfileForm(instance=request.user)
 
