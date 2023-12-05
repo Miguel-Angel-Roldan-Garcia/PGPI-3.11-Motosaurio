@@ -67,6 +67,11 @@
             <li {% if section == "reclamaciones" %}class="selected"{% endif %}>
                     <a href="../reclamaciones">Reclamaciones</a>
             </li>
+            {%if user.is_superuser %}
+                <li {% if section == "productos vendidos" %}class="selected"{% endif %}>
+                    <a href="../shop/productos_vendidos">Productos vendidos</a>
+                </li>
+            {% endif %}
             
         </ul>
         <style>
