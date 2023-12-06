@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %} Datos de envío y pago {% endblock %}
+{% block extrahead %}
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Seguimiento de pedido</h1>
+    <h3>Pedido con id: {{ order.id }}</h3>
+    <span>Estado del pedido: {{ order.legible_estado }}</span>
+</div>
+
+{% endblock %}
