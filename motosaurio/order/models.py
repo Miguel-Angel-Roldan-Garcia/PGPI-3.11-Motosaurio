@@ -18,7 +18,12 @@ class Order(models.Model):
         ["R", "Recoger en tienda"]
     ]
 
-    estados = [['P','Procesando'],['A','Aceptado'],['E','Enviado'],['EN','Entregado']]
+    estados = [
+        ['P','Procesando'], 
+        ['A','Aceptado'], 
+        ['E','Enviado'], 
+        ['EN','Entregado']
+    ]
 
     customer = models.ForeignKey(MiUsuario, null=True, on_delete=models.SET_NULL)
     first_name = models.CharField('Nombre', max_length=200)
@@ -30,6 +35,13 @@ class Order(models.Model):
     delivery_type = models.TextField("Tipo de envio", choices = tipos_envio)
     estado = models.TextField("Estado", choices=estados, default=estados[0])
     fecha_creacion=models.DateField("Fecha de creación", default=date.today)
+
+    @property
+    def legible_estado(self):
+        for tipo in self.estados:
+            if tipo[0] == self.estado:
+                return tipo[1]
+        return None
 
     def __str__(self):
         return "Order " + str(self.id)

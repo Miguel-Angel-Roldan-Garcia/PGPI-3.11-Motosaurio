@@ -164,4 +164,14 @@ class StripeCheckout(TemplateView):
             
             return render(request, 'stripe_checkout.html', context)
 
+class Tracking(TemplateView):
+    template_name = "tracking.html"
+    
+class TrackingShow(TemplateView):
+
+    def get(self, request, order_id, *args, **kwargs):
+        context = {
+            "order": Order.objects.get(id = order_id)
+        }
         
+        return render(request, "tracking_show.html", context)
