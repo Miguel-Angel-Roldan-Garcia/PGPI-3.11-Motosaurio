@@ -2,7 +2,9 @@ from typing import Any
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
 from cart.forms import CestaAddProductForm
+from .forms import ProductForm
 
 from .models import Product
 
@@ -51,9 +53,32 @@ class ProductDetailView(TemplateView):
         product_id = kwargs.get('pk')
         product = get_object_or_404(Product, id=product_id)
 
+        form_valoracion = ProductForm(request.POST)
+        form_cesta = CestaAddProductForm(request.POST)
+
         context = {
             'product': product,
+            'valoracion_form': form_valoracion,
+            'cesta_product_form': form_cesta,
             'section': 'product_detail',
         }
+        
+
+        return render(request, template_name=self.template_name, context=context)
+    
+    def post(self, request, *args, **kwargs):
+        product_id = kwargs.get('pk')
+        product = get_object_or_404(Product, id=product_id)
+        form_valoracion = ProductForm(request.POST)
+        form_cesta = CestaAddProductForm(request.POST)
+
+        context = {
+            'product': product,
+            'valoracion_form': form_valoracion,
+            'cesta_product_form': form_cesta,
+            'section': 'product_detail',
+        }
+        cesta_product_form = CestaAddProductForm
+        context['cesta_product_form'] = cesta_product_form
 
         return render(request, template_name=self.template_name, context=context)

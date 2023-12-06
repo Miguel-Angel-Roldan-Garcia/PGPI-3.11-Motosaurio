@@ -40,14 +40,21 @@
             <p class="price" style="font-size: 1.2em;">Precio: {{ product.price }}€</p>
             <p style="font-size: 1.1em;">Descripción: {{ product.description|linebreaks }}</p>
             {% if product.available %}
-            <form action="{% url 'cesta:cesta_add' product.id %}" method="post">
-                {{ cesta_product_form }}
-                {% csrf_token %}
-                <input type="submit" value="Añadir al carrito">
-            </form>
+                <form action="{% url "cesta:cesta_add" product.id %}" method="post">
+                    {{ cesta_product_form.as_p }}
+                    {% csrf_token %}
+                    <input type="submit" value="Añadir al carrito">
+                </form>
             {% else %}
             <p><span style="color: red;">PRODUCTO AGOTADO</span></p>
-                {% endif %}
+            {% endif %}
+
+                <h2>Deja una Opinión</h2>
+                <form method="post" action="{% url 'product_detail' pk=product.id slug=product.slug %}">
+                    {% csrf_token %}
+                    {{ valoracion_form.as_p }}
+                    <button type="submit">Enviar Opinión</button>
+                </form>
             </div>
         </main>
         
