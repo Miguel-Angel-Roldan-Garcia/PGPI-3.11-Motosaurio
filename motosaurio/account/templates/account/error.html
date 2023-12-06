@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Error de validación</h1>
+    <p>{{ error_message }}</p>
+
+  <a href="{% url 'perfil' %}">Volver al formulario</a>
+
+    
+{% endblock %}

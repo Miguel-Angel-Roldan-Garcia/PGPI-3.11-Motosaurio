@@ -33,7 +33,7 @@
 
         <style>
             .menu li {
-                font-size: 30px; 
+                font-size: 25px; 
             }
         </style>
   
@@ -42,7 +42,7 @@
                 <a href="{% url 'dashboard' %}">Catálogo</a>
             </li>
             <li {% if section == "images" %}class="selected"{% endif %}>
-                <a href="../cesta">Carrito</a>
+                <a href="../../cesta">Carrito</a>
                 <div class="cart">
                     {% with total_items=cart|length %}
                         {% if total_items > 0 %}
@@ -61,10 +61,18 @@
                 <a href="{% url 'perfil' %}">Perfil</a>
             </li>
             <li {% if section == "empresa" %}class="selected"{% endif %}>
-                    <a href="../empresa">Empresa</a>
+                <a href="../../empresa">Empresa</a>
             </li>
             <li {% if section == "reclamaciones" %}class="selected"{% endif %}>
-                    <a href="../reclamaciones">Reclamaciones</a>
+                <a href="../../reclamaciones">Reclamaciones</a>
+            </li>
+            {%if user.is_superuser %}
+            <li {% if section == "productos vendidos" %}class="selected"{% endif %}>
+                <a href="../shop/productos_vendidos">Productos vendidos</a>
+            </li>
+            {% endif %}
+            <li {% if section == "tracking" %}class="selected"{% endif %}>
+                <a href="{% url 'tracking' %}">Seguimiento</a>
             </li>
             <li {% if section == "orders" %}class="selected"{% endif %}>
                 <a href="{% url 'list-orders-user' %}">Mis pedidos</a>

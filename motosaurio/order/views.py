@@ -35,7 +35,8 @@ class CheckoutOrder(TemplateView):
             user = request.user
             form["first_name"].initial = user.first_name
             form["email"].initial = user.email
-            form["postal_code"].initial = user.direccion
+            form["direction"].initial = user.direccion
+            form["postal_code"].initial = user.codigo
             # form["card_number"] .initial = user.tarjeta
 
         context["form"] = form
@@ -186,3 +187,15 @@ class ListOrdersUser(TemplateView):
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)   
+    
+class Tracking(TemplateView):
+    template_name = "tracking.html"
+    
+class TrackingShow(TemplateView):
+
+    def get(self, request, order_id, *args, **kwargs):
+        context = {
+            "order": Order.objects.get(id = order_id)
+        }
+        
+        return render(request, "tracking_show.html", context)
