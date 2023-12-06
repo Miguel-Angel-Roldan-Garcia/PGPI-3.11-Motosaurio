@@ -113,9 +113,21 @@
     </div>
 </div>
 
+{% if form.payment_type.data == None and form.payment_type.initial == 'Cr' %}
+<script>
+    document.getElementById("{{ form.payment_type.id_for_label }}").selectedIndex = 1;
+</script>
+{% endif %}
+
 {% if form.payment_type.data == 'Cr' %}
 <script>
     document.getElementById("{{ form.payment_type.id_for_label }}").selectedIndex = 1;
+</script>
+{% endif %}
+
+{% if form.delivery_type.data == None and form.delivery_type.initial == 'R' %}
+<script>
+    document.getElementById("{{ form.delivery_type.id_for_label }}").selectedIndex = 1;
 </script>
 {% endif %}
 

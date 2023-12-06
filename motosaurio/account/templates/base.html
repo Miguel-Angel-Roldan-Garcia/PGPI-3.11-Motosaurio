@@ -68,7 +68,7 @@
             </li>
             {%if user.is_superuser %}
             <li {% if section == "productos vendidos" %}class="selected"{% endif %}>
-                <a href="../shop/productos_vendidos">Productos vendidos</a>
+                <a href="{% url 'productos_vendidos' %}">Productos vendidos</a>
             </li>
             {% endif %}
             <li {% if section == "tracking" %}class="selected"{% endif %}>

@@ -39,7 +39,7 @@
     {% with order=order_tuple.0%}
     <div class="card" style="margin-bottom: 10px;">
         <div class="col custom-row">
-            <div class="col custom-col">Id: {{ order.id }} | &nbsp; <a href="/orders/tracking/{{ order.id }}">Seguimiento del pedido</a></div>
+            <div class="col custom-col">Id: {{ order.id }} | &nbsp; <a href="{% url 'tracking_show' order.id %}">Seguimiento del pedido</a></div>
         </div>
         <div class="col custom-row">
             <div class="col custom-col">Nombre: {{ order.first_name }} | &nbsp; Email: {{ order.email }}</div>

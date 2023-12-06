@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.http import HttpResponseNotFound
 
 from cart.cesta import Cesta
 from shop.models import Product
@@ -37,6 +38,8 @@ class CheckoutOrder(TemplateView):
             form["email"].initial = user.email
             form["direction"].initial = user.direccion
             form["postal_code"].initial = user.codigo
+            form["payment_type"].initial = user.tipo_pago
+            form["delivery_type"].initial = user.delivery_type
             # form["card_number"] .initial = user.tarjeta
 
         context["form"] = form
@@ -64,7 +67,8 @@ class CheckoutOrder(TemplateView):
                           cod_postal = form["postal_code"].data, \
                           tipo_pago = form["payment_type"].data, \
                           total_price = final_price, \
-                          delivery_type = delivery_type
+                          delivery_type = delivery_type, \
+                          estado = "P"
                         )
             order.save()
 
@@ -105,7 +109,7 @@ class CheckoutOrder(TemplateView):
                 request.session[settings.CART_SESSION_ID] = None
                 request.session.modified = True
 
-                return redirect("dashboard")
+                return render(request, 'checkout_thanks.html', {})
         else:
             template_name = "checkout_order.html"
             context = {}
@@ -148,7 +152,7 @@ class StripeCheckout(TemplateView):
             request.session[settings.CART_SESSION_ID] = None
             request.session.modified = True
 
-            return redirect('dashboard')
+            return render(request, 'checkout_thanks.html', context)
 
         except stripe.error.CardError as e:
             # Card was declined
@@ -180,13 +184,8 @@ class ListOrdersUser(TemplateView):
         for order in orders:
             context["orders"].append((order, list(CartItem.objects.filter(order = order))))
 
-        
-
-
         return context
-
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)   
+ 
     
 class Tracking(TemplateView):
     template_name = "tracking.html"
@@ -194,8 +193,13 @@ class Tracking(TemplateView):
 class TrackingShow(TemplateView):
 
     def get(self, request, order_id, *args, **kwargs):
+        try:
+            order = Order.objects.get(id = order_id)
+        except:
+            return HttpResponseNotFound("No se ha encontrado ningún pedido con ese identificador")
+        
         context = {
-            "order": Order.objects.get(id = order_id)
+            "order": order
         }
         
         return render(request, "tracking_show.html", context)
