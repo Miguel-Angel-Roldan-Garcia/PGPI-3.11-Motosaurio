@@ -17,7 +17,7 @@ def cesta_add(request, product_id):
         cesta.add(product=product,
                 quantity=cd['quantity'],
                 override_quantity=cd['override'])
-    return redirect('cesta:cesta_detail')
+    return redirect('dashboard')
 
 @require_POST
 def cesta_remove(request, product_id):

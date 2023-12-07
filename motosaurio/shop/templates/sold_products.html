@@ -1,0 +1,45 @@
+{% extends "account/dashboard.html" %}
+{% load i18n static %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+
+{% block title %} Motosaurio {% endblock %}
+
+{% block extrahead %}
+  <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <style>
+    table {
+      width: 100%; /* Set the table width to 100% to make it responsive */
+      border-collapse: collapse; /* Remove spacing between table cells */
+    }
+
+    th, td {
+      min-width: 100px; /* Set a minimum width for all table header and data cells */
+      padding: 10px; /* Add padding for better appearance, adjust as needed */
+      border: 1px solid #ddd; /* Add borders for better visibility, adjust as needed */
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+ <h1>Sold Products</h1>
+ <table>
+   <thead>
+     <tr>
+       <th>ID</th>
+       <th>Name</th>
+       <th>Total Sold</th>
+     </tr>
+   </thead>
+   <tbody>
+     {% for product in products %}
+       <tr>
+         <td>{{ product.id }}</td>
+         <td>{{ product.name }}</td>
+         <td>{{ product.total_sold }}</td>
+       </tr>
+     {% endfor %}
+   </tbody>
+ </table>
+{% endblock %}

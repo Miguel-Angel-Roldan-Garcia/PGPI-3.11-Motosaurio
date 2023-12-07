@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-31kt!)_b^q++@_gih&*-)(wx#+k9i*4039ro_5_@ybx6+s==jw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["pgpi-motosaurio.onrender.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["pgpi-motosaurio.onrender.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "shop.apps.ShopConfig",
     "motosaurio",
-    "cart.apps.CartConfig"
+    "cart.apps.CartConfig",
+    "reclamaciones.apps.ReclamacionesConfig",
+    "empresa.apps.EmpresaConfig",
+    "order.apps.OrderConfig"
+
 ]
 
 MIDDLEWARE = [
@@ -66,6 +70,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -136,3 +141,6 @@ AUTH_USER_MODEL = 'motosaurio.MiUsuario'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+STRIPE_PUBLIC_KEY = 'pk_test_51OIwh4AbTIOTrvYZdezJqeEaEHX2W8v13joEpO3iDVKLkDUBTNCIisLXZLjHQgeqi58imwmOHnKGjhe0zUiLGIdO00XtizefPy'
+STRIPE_SECRET_KEY = 'sk_test_51OIwh4AbTIOTrvYZyleE78fZiAJ7dfgvhCqLlyLNwKWmS41c26eDb8YHGNygg63emw5iwLXhm0kN0OcgjEi2Df6L00yF4pZBmF'
