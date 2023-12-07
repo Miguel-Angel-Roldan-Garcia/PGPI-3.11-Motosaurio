@@ -36,7 +36,6 @@
                 font-size: 25px; 
             }
         </style>
-
   
         <ul class="menu">
             <li {% if section == "dashboard" %}class="selected"{% endif %}>
@@ -69,14 +68,18 @@
             </li>
             {%if user.is_superuser %}
             <li {% if section == "productos vendidos" %}class="selected"{% endif %}>
-                <a href="../shop/productos_vendidos">Productos vendidos</a>
+                <a href="{% url 'productos_vendidos' %}">Productos vendidos</a>
             </li>
             {% endif %}
             <li {% if section == "tracking" %}class="selected"{% endif %}>
                 <a href="{% url 'tracking' %}">Seguimiento</a>
             </li>
+            <li {% if section == "orders" %}class="selected"{% endif %}>
+                <a href="{% url 'list-orders-user' %}">Mis pedidos</a>
+            </li>
             
         </ul>
+
         <style>
 
             .user {
