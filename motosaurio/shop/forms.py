@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product
+from .models import ProductReview
 
 class ProductForm(forms.ModelForm):
     RATING_CHOICES = [
@@ -10,9 +10,10 @@ class ProductForm(forms.ModelForm):
         (5, '5'),
     ]
 
-    rating = forms.ChoiceField(label='Puntuación',choices=RATING_CHOICES,required=True,)
-    comment = forms.CharField(label='Opinión',required=False,widget=forms.Textarea(attrs={'rows': 10, 'cols': 70}))
+    rating = forms.ChoiceField(label='Puntuación', choices=RATING_CHOICES, required=True)
+    opinion = forms.CharField(label='Opinión', required=False, widget=forms.Textarea(attrs={'rows': 10, 'cols': 70}))
 
     class Meta:
-        model = Product
-        fields = ['rating', 'comment']
+        model = ProductReview
+        fields = ['rating', 'opinion']
+

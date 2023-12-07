@@ -1,12 +1,12 @@
 from typing import Any
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from cart.forms import CestaAddProductForm
 from .forms import ProductForm
 
-from .models import Product
+from .models import Product, ProductReview
 
 class ListProducts(TemplateView):
     
@@ -47,30 +47,52 @@ class ListProducts(TemplateView):
         return render(request, template_name=template_name, context = context)
 
 class ProductDetailView(TemplateView):
-    template_name = "product_detail.html"  
+    template_name = "product_detail.html"
 
     def get(self, request, *args, **kwargs):
         product_id = kwargs.get('pk')
         product = get_object_or_404(Product, id=product_id)
+        reviews = ProductReview.objects.filter(product=product)
 
-        form_valoracion = ProductForm(request.POST)
-        form_cesta = CestaAddProductForm(request.POST)
+        form_valoracion = ProductForm()
+        form_cesta = CestaAddProductForm()
 
         context = {
             'product': product,
+            'reviews': reviews,  # Agrega esto para pasar las revisiones al contexto
             'valoracion_form': form_valoracion,
             'cesta_product_form': form_cesta,
             'section': 'product_detail',
         }
-        
 
         return render(request, template_name=self.template_name, context=context)
-    
+
+
     def post(self, request, *args, **kwargs):
         product_id = kwargs.get('pk')
         product = get_object_or_404(Product, id=product_id)
         form_valoracion = ProductForm(request.POST)
         form_cesta = CestaAddProductForm(request.POST)
+
+        try:
+            if request.method == 'POST' and request.user.is_authenticated:
+                if form_valoracion.is_valid():
+                    rating = form_valoracion.cleaned_data['rating']
+                    opinion = form_valoracion.cleaned_data['opinion']
+                    print(f"Rating: {rating}, Opinion: {opinion}")
+
+                    if opinion:
+                        review = ProductReview.objects.create(product=product, rating=rating, opinion=opinion, user=request.user)
+                        print("Review created successfully!")
+                    
+                    print(f"Rating: {rating}, Opinion: {opinion}")
+                    return redirect('shop:product_detail', pk=product.pk)
+                else:
+                    print("Form is not valid. Errors:", form_valoracion.errors)
+        except Exception as e:
+            print(f"Error creating review: {e}")
+        
+        print("Reviews:", product.reviews.all())
 
         context = {
             'product': product,

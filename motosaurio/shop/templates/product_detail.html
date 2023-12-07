@@ -19,6 +19,9 @@
         padding: 10px; /* Add padding for better appearance, adjust as needed */
         border: 1px solid #ddd; /* Add borders for better visibility, adjust as needed */
         }
+        .notification.space-below {
+        margin-bottom: 40px;
+        }   
     </style>
     {% endblock %}
 
@@ -49,12 +52,69 @@
             <p><span style="color: red;">PRODUCTO AGOTADO</span></p>
             {% endif %}
 
-                <h2>Deja una Opinión</h2>
-                <form method="post" action="{% url 'product_detail' pk=product.id slug=product.slug %}">
-                    {% csrf_token %}
-                    {{ valoracion_form.as_p }}
-                    <button type="submit">Enviar Opinión</button>
-                </form>
+            <h2 class="subtitle">Valoraciones</h2>
+
+            <div class="reviews-wrapper">
+                {% if product.reviews.all %}
+                    {% for review in product.reviews.all %}
+                        <div class="notification space-below">
+                            <p>
+                                <strong>Fecha de creación:</strong> {{ review.created_at|date:"Y-m-d" }},
+                                <strong>Autor:</strong> {{ review.user }},
+                                <strong>Puntuación:</strong> {{ review.rating }}
+                            </p>
+            
+                            {{ review.opinion }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="notification space-below">
+                        Aún no hay ninguna valoración para este producto...
+                    </div>
+                {% endif %}
+            </div>
+                        
+    
+            <div class="notification space-below">
+                {% if request.user.is_authenticated %}
+                    <form method="post" action=".">
+                        {% csrf_token %}
+                        
+                        <div class="field">
+                            <h2 class="subtitle">Deja tu valoracion del producto</h2>
+                            <label>Puntuacion</label>
+    
+                            <div class="control">
+                                <div class="select">
+                                    <select name="rating">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3" selected>3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="field">
+                            <label>Opinion</label>
+    
+                            <div class="control">
+                                <textarea class="textarea" name="opinion"></textarea>
+                            </div>
+                        </div>
+    
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-success">Enviar</button>
+                            </div>
+                        </div>
+                    </form>
+                {% else %}
+                    <p>Please sign in to add review!</p>
+                {% endif %}
+    
             </div>
         </main>
         
