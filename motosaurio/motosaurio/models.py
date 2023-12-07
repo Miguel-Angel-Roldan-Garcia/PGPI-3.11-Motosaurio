@@ -18,7 +18,7 @@ class MiUsuario(AbstractUser):
     email = models.CharField('Correo elecrónico',max_length=200)
     direccion = models.CharField('Dirección postal', max_length=200)
     codigo = models.IntegerField('Código postal',validators=[MaxValueValidator(99999)], null=True)
-    tipo_pago = models.TextField("Tipo de pago", choices = tipos_pago,null=True)
+    payment_type = models.TextField("Tipo de pago", choices = tipos_pago,null=True)
     delivery_type = models.TextField("Tipo de envío", choices = tipos_envio,null=True)
     tarjeta = models.BigIntegerField('Tarjeta de crédito', null=True)
 
