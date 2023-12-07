@@ -38,7 +38,7 @@ class CheckoutOrder(TemplateView):
             form["email"].initial = user.email
             form["direction"].initial = user.direccion
             form["postal_code"].initial = user.codigo
-            form["payment_type"].initial = user.tipo_pago
+            form["payment_type"].initial = user.payment_type
             form["delivery_type"].initial = user.delivery_type
             # form["card_number"] .initial = user.tarjeta
 
@@ -109,7 +109,7 @@ class CheckoutOrder(TemplateView):
                 request.session[settings.CART_SESSION_ID] = None
                 request.session.modified = True
 
-                return render(request, 'checkout_thanks.html', {})
+                return render(request, 'checkout_thanks.html', {"email":order.email})
         else:
             template_name = "checkout_order.html"
             context = {}
@@ -135,7 +135,10 @@ class StripeCheckout(TemplateView):
     def post(self, request, order_id, *args, **kwargs):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         token = request.POST.get('stripeToken')
-        amount = Order.objects.get(id = order_id).total_price
+        order =  Order.objects.get(id = order_id)
+        amount = order.total_price
+        email = order.email
+        context = {"email":email}
         
         try:
             # Create a charge using the token and amount

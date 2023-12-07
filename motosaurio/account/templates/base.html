@@ -29,11 +29,11 @@
 
 <body>
     <div id="header">
+        
         <span class="logo"><img src="{% static 'images/Logo.png' %}" alt="Logo"></span>
-
         <style>
             .menu li {
-                font-size: 25px; 
+                font-size: 30px; 
             }
         </style>
   
@@ -79,7 +79,7 @@
             </li>
             
         </ul>
-
+       
         <style>
 
             .user {
@@ -88,14 +88,16 @@
         </style>
 
         <span class="user">
+            
             {% if request.user.is_authenticated %}
                 Hola {{ request.user.first_name|default:request.user.username }},
                 <a href="{% url "logout" %}">Logout</a>
             {% else %}
                 <a href="{% url "login" %}">Log-in</a>
             {% endif %}
+            
         </span>
-
+        
     </div>
 
     {% block content %}
