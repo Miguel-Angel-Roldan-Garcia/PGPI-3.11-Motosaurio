@@ -1,0 +1,127 @@
+    {% extends "account/dashboard.html" %}
+    {% load i18n static %}
+    {% load custom_filters %}
+    {% load custom_tags %}
+
+
+    {% block title %} Motosaurio {% endblock %}
+
+    {% block extrahead %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+        table {
+        width: 100%; /* Set the table width to 100% to make it responsive */
+        border-collapse: collapse; /* Remove spacing between table cells */
+        }
+
+        th, td {
+        min-width: 100px; /* Set a minimum width for all table header and data cells */
+        padding: 10px; /* Add padding for better appearance, adjust as needed */
+        border: 1px solid #ddd; /* Add borders for better visibility, adjust as needed */
+        }
+        .notification.space-below {
+        margin-bottom: 40px;
+        }   
+    </style>
+    {% endblock %}
+
+    {% block content %}
+
+        <!-- Content Box -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="mb-4" style="font-size: 3em;">{{ product.name }}</h1>
+            </div>
+        
+            <div class="product-detail">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+            <h2 style="font-size: 1.2em;">
+                <a>
+                Tipo de producto: {{ product.product_type|parse_product_type|title_value }}
+                </a>
+            </h2>
+            <p class="price" style="font-size: 1.2em;">Precio: {{ product.price }}€</p>
+            <p style="font-size: 1.1em;">Descripción: {{ product.description|linebreaks }}</p>
+            {% if product.available %}
+                <form action="{% url "cesta:cesta_add" product.id %}" method="post">
+                    {{ cesta_product_form.as_p }}
+                    {% csrf_token %}
+                    <input type="submit" value="Añadir al carrito">
+                </form>
+            {% else %}
+            <p><span style="color: red;">PRODUCTO AGOTADO</span></p>
+            {% endif %}
+
+            <h2 class="subtitle">Valoraciones</h2>
+
+            <div class="reviews-wrapper">
+                {% if product.reviews.all %}
+                    {% for review in product.reviews.all %}
+                        <div class="notification space-below">
+                            <p>
+                                <strong>Fecha de creación:</strong> {{ review.created_at|date:"Y-m-d" }},
+                                <strong>Autor:</strong> {{ review.user }},
+                                <strong>Puntuación:</strong> {{ review.rating }}
+                            </p>
+            
+                            {{ review.opinion }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="notification space-below">
+                        Aún no hay ninguna valoración para este producto...
+                    </div>
+                {% endif %}
+            </div>
+                        
+    
+            <div class="notification space-below">
+                {% if request.user.is_authenticated %}
+                    <form method="post" action=".">
+                        {% csrf_token %}
+                        
+                        <div class="field">
+                            <h2 class="subtitle">Deja tu valoracion del producto</h2>
+                            <label>Puntuacion</label>
+    
+                            <div class="control">
+                                <div class="select">
+                                    <select name="rating">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3" selected>3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="field">
+                            <label>Opinion</label>
+    
+                            <div class="control">
+                                <textarea class="textarea" name="opinion"></textarea>
+                            </div>
+                        </div>
+    
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-success">Enviar</button>
+                            </div>
+                        </div>
+                    </form>
+                {% else %}
+                    <p>Please sign in to add review!</p>
+                {% endif %}
+    
+            </div>
+        </main>
+        
+    <script src="{% static 'filter.js' %}"></script>
+
+    <!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    {% endblock %}
