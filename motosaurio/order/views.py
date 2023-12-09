@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.db import transaction
+from django.core.mail import send_mail
 
+from motosaurio.models import MiUsuario
 from cart.cesta import Cesta
 from shop.models import Product
 
@@ -102,6 +104,8 @@ class CheckoutOrder(TemplateView):
                 request.session["order_created_id"] = None
                 request.session[settings.CART_SESSION_ID] = None
                 request.session.modified = True
+                if(request.user.is_authenticated):
+                    send_confirmation_mail(request.user, order.id)
 
                 return redirect("dashboard")
         else:
@@ -146,6 +150,9 @@ class StripeCheckout(TemplateView):
             request.session[settings.CART_SESSION_ID] = None
             request.session.modified = True
 
+            if(request.user.is_authenticated):
+                send_confirmation_mail(request.user, order_id)
+
             return redirect('dashboard')
 
         except stripe.error.CardError as e:
@@ -175,3 +182,35 @@ class TrackingShow(TemplateView):
         }
         
         return render(request, "tracking_show.html", context)
+    
+def send_confirmation_mail(user, id_pedido):
+    try:
+        userName = user.username
+        userMail = user.email
+        order = Order.objects.get(id = id_pedido)
+        items = CartItem.objects.filter(order = order)
+
+        asunto = f'Confirmación de pedido #{id_pedido}'
+        mensaje = f'Hola {userName},\n\nGracias por realizar el pedido con id: #{id_pedido} con nosotros!.\n'
+        mensaje += 'Tu pedido contiene los siguientes productos: \n\n'
+        
+        for ci in items:
+            mensaje += f"{ci.quantity} x {ci.item.name}\n"
+
+        mensaje += '\n¡Estamos procesando tu solicitud y la enviaremos a la dirección proporcionada!\n\nAtentamente, El equipo de Motosaurio.'
+
+        sender_mail = 'motosaurio.project@outlook.com'
+
+        send_mail(
+            subject=asunto,
+            message=mensaje,
+            from_email=sender_mail,
+            recipient_list=[userMail],
+            fail_silently=False
+        )
+
+        return True  
+
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+        return False
