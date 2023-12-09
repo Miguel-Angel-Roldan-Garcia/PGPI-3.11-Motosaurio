@@ -9,9 +9,9 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name= 'logout'),
     path('', include('django.contrib.auth.urls')),
-    path('', shop_views.ListProducts.as_view(), name='dashboard'),
-    path('', include('shop.urls', namespace='shop')),
-    path('product/<int:pk>/<slug:slug>/', shop_views.ProductDetailView.as_view(), name='product_detail'),
+    #path('', shop_views.ListProducts.as_view(), name='dashboard'),
+    #path('', include('shop.urls', namespace='shop')),
+    #path('product/<int:pk>/<slug:slug>/', shop_views.ProductDetailView.as_view(), name='product_detail'),
     path('profile/', views.profile, name='perfil'),
     path('register/', views.register, name='register'),
 ]

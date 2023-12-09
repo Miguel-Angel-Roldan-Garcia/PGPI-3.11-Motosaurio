@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.db import transaction
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseNotFound
 
+from motosaurio.models import MiUsuario
 from cart.cesta import Cesta
 from shop.models import Product
 
@@ -108,6 +110,11 @@ class CheckoutOrder(TemplateView):
                 request.session["order_created_id"] = None
                 request.session[settings.CART_SESSION_ID] = None
                 request.session.modified = True
+                
+                if(request.user.is_authenticated):
+                    send_confirmation_mail(request.user.first_name, request.user.email, order.id)
+                elif(order.email != None):
+                    send_confirmation_mail(order.first_name, order.email, order.id)
 
                 return render(request, 'checkout_thanks.html', {"email":order.email})
         else:
@@ -146,7 +153,7 @@ class StripeCheckout(TemplateView):
                 amount=int(amount*100), # From eur to cents
                 currency='eur',
                 source=token,
-                description=f'Cargo por el pedido con id {order_id}',
+                description=f'Cargo por el pedido con id {order.id}',
             )
 
             # Payment was successful
@@ -154,6 +161,11 @@ class StripeCheckout(TemplateView):
             request.session["order_created_id"] = None
             request.session[settings.CART_SESSION_ID] = None
             request.session.modified = True
+
+            if(request.user.is_authenticated):
+                send_confirmation_mail(request.user.first_name, request.user.email, order.id)
+            elif(order.email != None):
+                send_confirmation_mail(order.first_name, order.email, order.id)
 
             return render(request, 'checkout_thanks.html', context)
 
@@ -206,3 +218,33 @@ class TrackingShow(TemplateView):
         }
         
         return render(request, "tracking_show.html", context)
+    
+def send_confirmation_mail(username, email, id_pedido):
+    try:
+        order = Order.objects.get(id = id_pedido)
+        items = CartItem.objects.filter(order = order)
+
+        asunto = f'Confirmación de pedido #{id_pedido}'
+        mensaje = f'Hola {username},\n\nGracias por realizar el pedido con id: #{id_pedido} con nosotros!.\n'
+        mensaje += 'Tu pedido contiene los siguientes productos: \n\n'
+        
+        for ci in items:
+            mensaje += f"{ci.quantity} x {ci.item.name}\n"
+
+        mensaje += '\n¡Estamos procesando tu solicitud y la enviaremos a la dirección proporcionada!\n\nAtentamente, El equipo de Motosaurio.'
+
+        sender_mail = 'motosaurio.project@outlook.com'
+
+        send_mail(
+            subject=asunto,
+            message=mensaje,
+            from_email=sender_mail,
+            recipient_list=[email],
+            fail_silently=False
+        )
+
+        return True  
+
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+        return False

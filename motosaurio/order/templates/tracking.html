@@ -23,7 +23,7 @@
 <script>
     function goToTracking() {
         input = document.getElementById("input")
-        window.location.href = "{% url 'tracking' %}" + "/" + input.value.toString()
+        window.location.href = "{% url 'order:tracking' %}" + "/" + input.value.toString()
     }
 </script>
 

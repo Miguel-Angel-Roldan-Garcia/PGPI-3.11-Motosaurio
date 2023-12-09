@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST
 from shop.models import Product
 from .cesta import Cesta
 from .forms import CestaAddProductForm
+from django.shortcuts import render, redirect
 
 @require_POST
 def cesta_add(request, product_id):
@@ -14,7 +15,7 @@ def cesta_add(request, product_id):
         cesta.add(product=product,
                 quantity=cd['quantity'],
                 override_quantity=cd['override'])
-    return redirect('dashboard')
+    return redirect('shop:dashboard')
 
 @require_POST
 def cesta_remove(request, product_id):
@@ -30,3 +31,4 @@ def cesta_detail(request):
                                     'quantity': item['quantity'],
                                     'override': True})
  return render(request, 'cesta/detail.html', {'cesta': cesta})
+

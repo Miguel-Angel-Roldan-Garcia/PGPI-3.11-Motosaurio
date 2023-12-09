@@ -144,3 +144,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STRIPE_PUBLIC_KEY = 'pk_test_51OIwh4AbTIOTrvYZdezJqeEaEHX2W8v13joEpO3iDVKLkDUBTNCIisLXZLjHQgeqi58imwmOHnKGjhe0zUiLGIdO00XtizefPy'
 STRIPE_SECRET_KEY = 'sk_test_51OIwh4AbTIOTrvYZyleE78fZiAJ7dfgvhCqLlyLNwKWmS41c26eDb8YHGNygg63emw5iwLXhm0kN0OcgjEi2Df6L00yF4pZBmF'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'  # Outlook SMTP server
+EMAIL_PORT = 587  # Outlook SMTP port for STARTTLS
+EMAIL_USE_TLS = True  # Use TLS encryption
+EMAIL_HOST_USER = 'motosaurio.project@outlook.com'
+EMAIL_HOST_PASSWORD = 'motosaurio_project_123' 
