@@ -6,7 +6,7 @@
 {% block content %}
   <script src="https://js.stripe.com/v3/"></script>
 
-  <form action="{% url 'stripe_checkout' order_id %}" method="post" id="payment-form">
+  <form action="{% url 'order:stripe_checkout' order_id %}" method="post" id="payment-form">
     {% csrf_token %}
     <!-- Display the order details and dynamically set the amount -->
     <p>Total del pedido: ${{ final_price }} €</p>

@@ -3,6 +3,9 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.db import transaction
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.http import HttpResponseNotFound
 
 from motosaurio.models import MiUsuario
 from cart.cesta import Cesta
@@ -37,6 +40,8 @@ class CheckoutOrder(TemplateView):
             form["email"].initial = user.email
             form["direction"].initial = user.direccion
             form["postal_code"].initial = user.codigo
+            form["payment_type"].initial = user.payment_type
+            form["delivery_type"].initial = user.delivery_type
             # form["card_number"] .initial = user.tarjeta
 
         context["form"] = form
@@ -64,7 +69,8 @@ class CheckoutOrder(TemplateView):
                           cod_postal = form["postal_code"].data, \
                           tipo_pago = form["payment_type"].data, \
                           total_price = final_price, \
-                          delivery_type = delivery_type
+                          delivery_type = delivery_type, \
+                          estado = "P"
                         )
             order.save()
 
@@ -104,10 +110,13 @@ class CheckoutOrder(TemplateView):
                 request.session["order_created_id"] = None
                 request.session[settings.CART_SESSION_ID] = None
                 request.session.modified = True
+                
                 if(request.user.is_authenticated):
-                    send_confirmation_mail(request.user, order.id)
+                    send_confirmation_mail(request.user.first_name, request.user.email, order.id)
+                elif(order.email != None):
+                    send_confirmation_mail(order.first_name, order.email, order.id)
 
-                return redirect("dashboard")
+                return render(request, 'checkout_thanks.html', {"email":order.email})
         else:
             template_name = "checkout_order.html"
             context = {}
@@ -133,7 +142,10 @@ class StripeCheckout(TemplateView):
     def post(self, request, order_id, *args, **kwargs):
         stripe.api_key = settings.STRIPE_SECRET_KEY
         token = request.POST.get('stripeToken')
-        amount = Order.objects.get(id = order_id).total_price
+        order =  Order.objects.get(id = order_id)
+        amount = order.total_price
+        email = order.email
+        context = {"email":email}
         
         try:
             # Create a charge using the token and amount
@@ -141,7 +153,7 @@ class StripeCheckout(TemplateView):
                 amount=int(amount*100), # From eur to cents
                 currency='eur',
                 source=token,
-                description=f'Cargo por el pedido con id {order_id}',
+                description=f'Cargo por el pedido con id {order.id}',
             )
 
             # Payment was successful
@@ -151,9 +163,11 @@ class StripeCheckout(TemplateView):
             request.session.modified = True
 
             if(request.user.is_authenticated):
-                send_confirmation_mail(request.user, order_id)
+                send_confirmation_mail(request.user.first_name, request.user.email, order.id)
+            elif(order.email != None):
+                send_confirmation_mail(order.first_name, order.email, order.id)
 
-            return redirect('dashboard')
+            return render(request, 'checkout_thanks.html', context)
 
         except stripe.error.CardError as e:
             # Card was declined
@@ -171,27 +185,47 @@ class StripeCheckout(TemplateView):
             
             return render(request, 'stripe_checkout.html', context)
 
+@method_decorator(login_required(login_url='/account/login'), name='dispatch')
+class ListOrdersUser(TemplateView):
+    template_name = 'list_orders_user.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        orders = Order.objects.filter(customer = user)
+        context["orders"] = list()
+
+        for order in orders:
+            context["orders"].append((order, list(CartItem.objects.filter(order = order))))
+
+        return context
+ 
+    
 class Tracking(TemplateView):
     template_name = "tracking.html"
     
 class TrackingShow(TemplateView):
 
     def get(self, request, order_id, *args, **kwargs):
+        try:
+            order = Order.objects.get(id = order_id)
+        except:
+            return HttpResponseNotFound("No se ha encontrado ningún pedido con ese identificador")
+        
         context = {
-            "order": Order.objects.get(id = order_id)
+            "order": order
         }
         
         return render(request, "tracking_show.html", context)
     
-def send_confirmation_mail(user, id_pedido):
+def send_confirmation_mail(username, email, id_pedido):
     try:
-        userName = user.username
-        userMail = user.email
         order = Order.objects.get(id = id_pedido)
         items = CartItem.objects.filter(order = order)
 
         asunto = f'Confirmación de pedido #{id_pedido}'
-        mensaje = f'Hola {userName},\n\nGracias por realizar el pedido con id: #{id_pedido} con nosotros!.\n'
+        mensaje = f'Hola {username},\n\nGracias por realizar el pedido con id: #{id_pedido} con nosotros!.\n'
         mensaje += 'Tu pedido contiene los siguientes productos: \n\n'
         
         for ci in items:
@@ -205,7 +239,7 @@ def send_confirmation_mail(user, id_pedido):
             subject=asunto,
             message=mensaje,
             from_email=sender_mail,
-            recipient_list=[userMail],
+            recipient_list=[email],
             fail_silently=False
         )
 

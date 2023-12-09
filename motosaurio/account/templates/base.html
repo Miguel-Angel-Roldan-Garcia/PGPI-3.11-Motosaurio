@@ -29,18 +29,17 @@
 
 <body>
     <div id="header">
+        
         <span class="logo"><img src="{% static 'images/Logo.png' %}" alt="Logo"></span>
-
         <style>
             .menu li {
-                font-size: 25px; 
+                font-size: 30px; 
             }
         </style>
-
   
         <ul class="menu">
             <li {% if section == "dashboard" %}class="selected"{% endif %}>
-                <a href="{% url 'dashboard' %}">Catálogo</a>
+                <a href="{% url 'shop:dashboard' %}">Catálogo</a>
             </li>
             <li {% if section == "images" %}class="selected"{% endif %}>
                 <a href="../../cesta">Carrito</a>
@@ -69,14 +68,18 @@
             </li>
             {%if user.is_superuser %}
             <li {% if section == "productos vendidos" %}class="selected"{% endif %}>
-                <a href="../shop/productos_vendidos">Productos vendidos</a>
+                <a href="{% url 'shop:productos_vendidos' %}">Productos vendidos</a>
             </li>
             {% endif %}
             <li {% if section == "tracking" %}class="selected"{% endif %}>
-                <a href="{% url 'tracking' %}">Seguimiento</a>
+                <a href="{% url 'order:tracking' %}">Seguimiento</a>
+            </li>
+            <li {% if section == "orders" %}class="selected"{% endif %}>
+                <a href="{% url 'order:list-orders-user' %}">Mis pedidos</a>
             </li>
             
         </ul>
+       
         <style>
 
             .user {
@@ -85,14 +88,16 @@
         </style>
 
         <span class="user">
+            
             {% if request.user.is_authenticated %}
                 Hola {{ request.user.first_name|default:request.user.username }},
                 <a href="{% url "logout" %}">Logout</a>
             {% else %}
                 <a href="{% url "login" %}">Log-in</a>
             {% endif %}
+            
         </span>
-
+        
     </div>
 
     {% block content %}
