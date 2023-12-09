@@ -42,10 +42,17 @@ class CheckoutOrder(TemplateView):
             form["postal_code"].initial = user.codigo
             form["payment_type"].initial = user.payment_type
             form["delivery_type"].initial = user.delivery_type
-            # form["card_number"] .initial = user.tarjeta
+        
+        stripe.public_key = settings.STRIPE_PUBLIC_KEY
 
+        context["stripe_public_key"] = stripe.public_key
         context["form"] = form
-        context["cesta"] = Cesta(request)
+        cesta = Cesta(request)
+        products = [i for i in cesta]
+        total_price = cesta.get_total_price()
+        # context["cesta"] = Cesta(request)
+        context["products"] = products
+        context["total_price"] = total_price
 
         return render(request, template_name = template_name, context = context)
     
@@ -103,7 +110,57 @@ class CheckoutOrder(TemplateView):
 
             if order.tipo_pago == "T":
                 # Credit card
-                return redirect(f"/order/{order.id}/stripe")
+                # return redirect(f"/order/{order.id}/stripe")
+                stripe.api_key = settings.STRIPE_SECRET_KEY
+                token = request.POST.get('stripeToken')
+                amount = order.total_price
+                
+                try:
+                    # Create a charge using the token and amount
+                    charge = stripe.Charge.create(
+                        amount=int(amount*100), # From eur to cents
+                        currency='eur',
+                        source=token,
+                        description=f'Cargo por el pedido con id {order.id}',
+                    )
+
+                    # Payment was successful
+                    # Empty cart and send confirmation email
+                    request.session["order_created_id"] = None
+                    request.session[settings.CART_SESSION_ID] = None
+                    request.session.modified = True
+
+                    if(order.email != None):
+                        send_confirmation_mail(order.first_name, order.email, order.id)
+
+                    email = order.email
+                    context = {"email": email}
+
+                    return render(request, 'checkout_thanks.html', context)
+
+                except stripe.error.CardError as e:
+                    # Card was declined
+                    error_message = str(e)
+
+                    stripe.public_key = settings.STRIPE_PUBLIC_KEY
+
+                    context = {
+                        "stripe_public_key": stripe.public_key,
+                        'error_message': error_message,
+                        "form": form,
+                        "cesta": cesta
+                    }
+
+                    order_created_id = request.session.get("order_created_id")
+                    if order_created_id:
+                        request.session["order_created_id"] = None
+                        request.session.modified = True
+                        try:
+                            Order.objects.get(id = order_created_id).delete()    
+                        except Order.DoesNotExist:
+                            pass
+                    
+                    return render(request, "checkout_order.html", context)
             else:
                 # Contrareembolso
                 # Empty cart and send confirmation email
@@ -111,19 +168,24 @@ class CheckoutOrder(TemplateView):
                 request.session[settings.CART_SESSION_ID] = None
                 request.session.modified = True
                 
-                if(request.user.is_authenticated):
-                    send_confirmation_mail(request.user.first_name, request.user.email, order.id)
-                elif(order.email != None):
+                if(order.email != None):
                     send_confirmation_mail(order.first_name, order.email, order.id)
 
                 return render(request, 'checkout_thanks.html', {"email":order.email})
         else:
-            template_name = "checkout_order.html"
             context = {}
 
             context["form"] = form
-            context["cesta"] = cesta
-            return render(request, template_name = template_name, context = context)
+
+            stripe.public_key = settings.STRIPE_PUBLIC_KEY
+            context["stripe_public_key"] = stripe.public_key
+            
+            cesta = Cesta(request)
+            products = [i for i in cesta]
+            total_price = cesta.get_total_price()
+            context["products"] = products
+            context["total_price"] = total_price
+            return render(request, "checkout_order.html", context = context)
         
 class StripeCheckout(TemplateView):
 
@@ -162,9 +224,7 @@ class StripeCheckout(TemplateView):
             request.session[settings.CART_SESSION_ID] = None
             request.session.modified = True
 
-            if(request.user.is_authenticated):
-                send_confirmation_mail(request.user.first_name, request.user.email, order.id)
-            elif(order.email != None):
+            if(order.email != None):
                 send_confirmation_mail(order.first_name, order.email, order.id)
 
             return render(request, 'checkout_thanks.html', context)

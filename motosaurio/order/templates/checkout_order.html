@@ -23,10 +23,8 @@
                 </div>
                 <div class="card-body">
                     <ul>
-                        {% for item in cesta %}
-                            {% with product=item.product %}
-                        <li> {{ item.quantity }} unidades: {{ product.name }}</li>
-                            {% endwith %}
+                        {% for item in products %}
+                        <li> {{ item.quantity }} unidades: {{ item.product.name }}</li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -40,7 +38,7 @@
                     Datos de compra
                 </div>
                 <div class="card-body">
-                    <form id="buyForm" style="overflow: hidden" method="post">
+                    <form id="payment-form" style="overflow: hidden" method="post">
                         {% csrf_token %}
 
                         <h4> Datos del cliente </h4>
@@ -78,6 +76,13 @@
                             </select>
                             {{ form.payment_type.errors }}
                         </div>
+                        
+                        <div class="form-row-container">
+                            <label> Tarjeta </label>
+                        </div>
+
+                        <div id="card-element" class="form-row-container"></div>
+                        <div>{{ error_message }}</div>
 
                         <div class="form-row-container">
                             <h4> Forma de envío </h4>
@@ -100,7 +105,7 @@
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label for="price">Price:</label>
-                                <p id="price">{{ cesta.get_total_price }} €</p>
+                                <p id="price">{{ total_price|floatformat:"2" }} €</p>
                             </div>
                             <div class="col-md-6 text-right">
                                 <button type="submit" class="btn btn-success">Buy</button>
@@ -136,6 +141,49 @@
     document.getElementById("{{ form.delivery_type.id_for_label }}").selectedIndex = 1;
 </script>
 {% endif %}
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('{{ stripe_public_key }}');
+    var elements = stripe.elements();
+
+    var card = elements.create('card');
+    card.mount('#card-element');
+
+    var form = document.getElementById('payment-form');
+    var payment_type_input = document.getElementById("{{ form.payment_type.id_for_label }}")
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        if(payment_type_input.value == "T") {
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                // Show error to the user
+                console.error(result.error.message);
+                } else {
+                // Send the token to your server
+                // You can use AJAX to send the token to your Django view
+                console.log(result.token);
+
+                // Append the token to the form before submitting
+                var hiddenInput = document.createElement('input');
+                hiddenInput.setAttribute('type', 'hidden');
+                hiddenInput.setAttribute('name', 'stripeToken');
+                hiddenInput.setAttribute('value', result.token.id);
+                form.appendChild(hiddenInput);
+
+                // Submit the form
+                form.submit();
+                }
+            });
+        } else if(payment_type_input.value == "Cr") {
+            form.submit();
+        } else {
+            console.error("The payment type value (" + payment_type_input.value + ") is invalid.")
+        }
+    });
+</script>
 
 <!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
 <script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
