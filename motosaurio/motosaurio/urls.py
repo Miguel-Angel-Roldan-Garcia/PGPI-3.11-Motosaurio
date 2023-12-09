@@ -25,6 +25,7 @@ urlpatterns = [
     path('reclamaciones/', include('reclamaciones.urls', namespace='reclamaciones')),
     path('empresa/', include('empresa.urls', namespace='empresa')),
     path("order/", include("order.urls")),
+    path("shop/productos_vendidos/", include("shop.urls")),
 ]
 
 # if settings.DEBUG:

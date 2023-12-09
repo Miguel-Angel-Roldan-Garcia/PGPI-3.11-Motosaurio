@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %} Datos de envío y pago {% endblock %}
+{% block extrahead %}
+<style>
+    /* Custom CSS for adjusting height to content */
+    .custom-container {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .custom-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .custom-col {
+      flex: 1;
+      margin-right: 10px; /* Adjust margin as needed */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+      .custom-col {
+        flex: 0 0 100%; /* Full width on small screens */
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="container custom-container">
+    {% for order_tuple in orders %}
+    {% with order=order_tuple.0%}
+    <div class="card" style="margin-bottom: 10px;">
+        <div class="col custom-row">
+            <div class="col custom-col">Id: {{ order.id }} | &nbsp; <a href="{% url 'tracking_show' order.id %}">Seguimiento del pedido</a></div>
+        </div>
+        <div class="col custom-row">
+            <div class="col custom-col">Nombre: {{ order.first_name }} | &nbsp; Email: {{ order.email }}</div>
+        </div>
+        <div class="col custom-row">
+            <div class="col custom-col">Direccion: {{ order.direction }} | &nbsp; Codigo postal: {{ order.cod_postal }} | &nbsp; Tipo de envío: {{ order.legible_tipo_envio }}</div>
+        </div>
+        <div class="col custom-row">
+            <div class="col custom-col">Precio total: {{ order.total_price }} | &nbsp; Tipo de pago: {{ order.legible_tipo_pago }}</div>
+        </div>
+    
+
+        <button class="btn btn-primary" data-toggle="collapse" data-target="#hiddenContainer-{{ order.id }}" aria-expanded="false" aria-controls="hiddenContainer">
+            Mostrar productos
+        </button>
+
+        <div class="collapse" id="hiddenContainer-{{ order.id }}" style="margin-bottom: 10px;">
+            {% with cart_items=order_tuple.1 %}
+            {% for cart_item in cart_items %}
+            <div class="card" style="margin-bottom: 10px;">
+                <div class="col custom-row">
+                    <div class="col custom-col">Nombre producto: {{ cart_item.item.name }}</div>
+                </div>
+                <div class="col custom-row">
+                    <div class="col custom-col">Precio: {{ cart_item.item.price }} | &nbsp; Unidades: {{ cart_item.quantity }}</div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endwith %}
+        </div>
+    </div>
+    {% endwith %}
+    {% endfor %}
+</div>
+
+<!-- Bootstrap JavaScript and dependencies (Popper.js and jQuery) -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% endblock %}

@@ -4,8 +4,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from cart.forms import CestaAddProductForm
-from .forms import ProductForm
+from django.contrib.admin.views.decorators import staff_member_required
+from order.models import CartItem, Order
+from datetime import *
+from django.db.models import Sum
 
+from .forms import ProductForm
 from .models import Product, ProductReview
 
 class ListProducts(TemplateView):
@@ -45,6 +49,7 @@ class ListProducts(TemplateView):
         cesta_product_form = CestaAddProductForm
         context['cesta_product_form'] = cesta_product_form
         return render(request, template_name=template_name, context = context)
+
 
 class ProductDetailView(TemplateView):
     template_name = "product_detail.html"
@@ -104,3 +109,17 @@ class ProductDetailView(TemplateView):
         context['cesta_product_form'] = cesta_product_form
 
         return render(request, template_name=self.template_name, context=context)
+
+     
+@staff_member_required
+def sold_products_view(request):
+    template_name = "sold_products.html"
+    date_from = datetime.now() - timedelta(days=60)
+    orders = Order.objects.filter(fecha_creacion__gte=date_from)
+    cart_items = CartItem.objects.filter(order__in=orders)
+    products = Product.objects.filter(cartitem__in=cart_items).annotate(total_sold=Sum('cartitem__quantity'))
+
+    context = dict()
+    context['products'] = products
+
+    return render(request, template_name=template_name, context=context)

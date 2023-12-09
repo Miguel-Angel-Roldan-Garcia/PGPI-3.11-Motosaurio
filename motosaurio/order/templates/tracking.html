@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %} Seguimiento {% endblock %}
+{% block extrahead %}
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Introduzca el identificador de su pedido</h1>
+    <input type="number" id="input" required>
+    <button onclick="goToTracking()">Buscar</button>
+</div>
+
+<script>
+    function goToTracking() {
+        input = document.getElementById("input")
+        window.location.href = "{% url 'tracking' %}" + "/" + input.value.toString()
+    }
+</script>
+
+{% endblock %}
