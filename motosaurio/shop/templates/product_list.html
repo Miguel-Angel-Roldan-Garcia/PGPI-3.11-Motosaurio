@@ -109,7 +109,7 @@
                     <p class="card-text">Fabricante: {{ product.producer|parse_producer|title_value }}</p>
                     <p class="card-text">{{ product.price }} €</p>
                     {% if product.available %}
-                      <form action="{% url "cesta:cesta_add" product.id %}" method="post">
+                      <form action="{% url 'cesta:cesta_add' product.id %}" method="post">
                         {{ cesta_product_form }}
                         {% csrf_token %}
                         <input type="submit" value="Añadir al carrito">
