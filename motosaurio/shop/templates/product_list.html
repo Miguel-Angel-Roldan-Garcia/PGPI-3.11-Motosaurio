@@ -95,7 +95,7 @@
             <div class="card product-card">
               <a href="{{ product.get_absolute_url }}">
                 {% if product.image %}
-                  {% with new_url=product.image.url|cambia_url:"/shop" %}
+                  {% with new_url=product.image.url|cambia_url:"/motosaurio/shop" %}
                     <img src="{{ new_url }}" class="card-img-top product-img" alt="Product image" width="300" height="300">
                   {% endwith %}
                 {% else %}
