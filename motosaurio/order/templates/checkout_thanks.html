@@ -5,6 +5,8 @@
 {% block content %}
     <br>
     <h1>¡Muchas gracias por su compra!</h1>
+    {% if email != None %}
     <p>Se ha enviado un correo de confirmación a la dirección {{ email }}</p>
+    {% endif %}
     <br>
 {% endblock %}
