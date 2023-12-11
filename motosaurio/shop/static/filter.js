@@ -11,12 +11,17 @@ function handleCheckboxClick(clickedCheckboxId, selectorExtraClass) {
 
 function searchFilter(order) {
   var searchInputElement = document.getElementById("searchInput");
+  var searchDescInputElement = document.getElementById("searchDescInput");
   const checkboxesType = Array.from(document.getElementsByClassName('form-check-input product-type'));
   const checkboxesProducer = Array.from(document.getElementsByClassName('form-check-input producer'));
 
   query = [];
   if(searchInputElement && searchInputElement.value) {
     query.push("name=" + searchInputElement.value);
+  }
+
+  if(searchDescInputElement && searchDescInputElement.value) {
+    query.push("desc=" + searchDescInputElement.value);
   }
 
   checkboxesType.forEach(checkbox => {

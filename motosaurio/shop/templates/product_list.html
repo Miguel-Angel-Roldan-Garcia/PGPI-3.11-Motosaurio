@@ -35,6 +35,10 @@
           <input type="text" class="form-control" id="searchInput" placeholder="Nombre">
         </div>     
         <div class="container mt-4">
+          <label for="searchDescInput" class="form-label">Buscar por descripción:</label>
+          <input type="text" class="form-control" id="searchDescInput" placeholder="Descripción">
+        </div> 
+        <div class="container mt-4">
           <label class="form-label">Filtrar por tipo:</label>
           {% for product_type in product_types %}
           <div class="form-check">
