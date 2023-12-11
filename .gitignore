@@ -162,3 +162,4 @@ cython_debug/
 
 #Archivos temporales
 motosaurio/media/products/
+motosaurio/shop/static/*

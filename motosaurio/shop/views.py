@@ -18,6 +18,7 @@ class ListProducts(TemplateView):
         template_name = "product_list.html"
         
         name_query = request.GET.get('name', None)
+        description_query = request.GET.get('desc', None)
         fabricante = request.GET.get('producer', None)
         tipo = request.GET.get('product_type', None)
         order = request.GET.get('order', None)
@@ -37,10 +38,13 @@ class ListProducts(TemplateView):
             products= Product.objects.order_by(str(order))
 
         if name_query:
-            name_query = name_query.upper()
-            products = [p for p in products if name_query in p.name]
+            name_query = name_query.lower()
+            products = [p for p in products if name_query in p.name.lower()]
+            
+        if description_query:
+            description_query = description_query.lower()
+            products = [p for p in products if description_query in p.description.lower()]
  
-
         context = dict()
         context['products'] = products
         context['product_types'] = sorted(list(product_types))
