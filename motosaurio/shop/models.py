@@ -33,8 +33,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=200)
     product_type= models.CharField(max_length=255, verbose_name='Tipo de producto', choices=TYPE_CHOICES, default='OT')
     producer = models.CharField(max_length=255, verbose_name='fabricante', choices=PRODUCER_CHOICES, default='OT')
-    image = models.ImageField(upload_to='motosaurio/shop/static/images',
-                            blank=True)
+    image = models.ImageField(upload_to='shop/static/images', blank=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10,
                                 decimal_places=2)
