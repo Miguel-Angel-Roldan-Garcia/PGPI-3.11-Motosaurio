@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["pgpi-motosaurio.onrender.com", "127.0.0.1", "localhost"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "cart.apps.CartConfig",
     "reclamaciones.apps.ReclamacionesConfig",
     "empresa.apps.EmpresaConfig",
-    "order.apps.OrderConfig"
+    "order.apps.OrderConfig",
+    "corsheaders"
 
 ]
 
@@ -151,3 +152,10 @@ EMAIL_PORT = 587  # Outlook SMTP port for STARTTLS
 EMAIL_USE_TLS = True  # Use TLS encryption
 EMAIL_HOST_USER = 'motosaurio.project@outlook.com'
 EMAIL_HOST_PASSWORD = 'motosaurio_project_123' 
+
+ALLOWED_ORIGINS = ["https://pgpi-motosaurio.onrender.com"]
+CSRF_ALLOWED_ORIGINS = ["https://pgpi-motosaurio.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com','https://*.127.0.0.1', "https://pgpi-motosaurio.onrender.com"]
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
